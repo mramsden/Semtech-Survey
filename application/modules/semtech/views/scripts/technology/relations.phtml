@@ -1,0 +1,37 @@
+<h2><?= $this->technology->name; ?></h2>
+<a href="<?= $this->url(array("id" => $this->technology->id), "technology"); ?>">Back to main entry</a>
+<h3>Relations</h3>
+<?php foreach (array_keys($this->relations) as $key): ?>
+<h3><?= $this->relations[$key]['text']; ?></h3>
+<?php unset($this->relations[$key]['text']);
+    if (count($this->relations[$key]) > 0): ?>
+<table>
+    <thead>
+        <tr><th>Technology Name</th><th>Relation Description</th></tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->relations[$key] as $relation): ?>
+        <tr><td><a href="<?= $this->url(array('id' => $relation['technology']->id)); ?>"><?= $relation['technology']->name; ?></a></td><td><?= $relation['description']; ?></td></tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php else: ?>
+<p>There are no relations of this type.</p>
+<?php endif; ?>
+<?php endforeach; ?>
+<h3>References</h3>
+<ul>
+	<?php foreach ($this->references as $reference): ?>
+		<li><?= nl2br($reference->reference); ?></li>
+	<?php endforeach; ?>
+</ul>
+<?php if (Zend_Auth::getInstance()->hasIdentity()): ?>
+<a href="javascript: document.getElementById('relationform').style.display = 'block'; document.getElementById('referenceform').style.display = 'none';">Show Relation Form</a> | 
+<a href="javascript: document.getElementById('relationform').style.display = 'none'; document.getElementById('referenceform').style.display = 'block';">Show Reference Form</a>
+<div id="relationform">
+	<?= $this->relationform; ?>
+</div>
+<div id="referenceform" style="display: none;">
+	<?= $this->referenceform; ?>
+</div>
+<?php endif; ?>

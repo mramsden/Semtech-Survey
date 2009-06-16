@@ -1,0 +1,27 @@
+#!/usr/bin/env php
+<?php
+define('APP_ROOT', realpath(dirname(dirname(__FILE__))));
+
+set_include_path(APP_ROOT."/library".PATH_SEPARATOR.APP_ROOT."/application/models".PATH_SEPARATOR.get_include_path());
+require 'Zend/Loader.php';
+Zend_Loader::registerAutoload();
+
+$config = new Zend_Config_Xml(APP_ROOT.'/application/config/database.xml', 'development');
+Zend_Db_Table::setDefaultAdapter(Zend_Db::factory($config->database));
+
+$technologytable = new TechnologyTable();
+$technologies = $technologytable->fetchAll();
+$twitter = new Semtech_Twitter();
+foreach ($technologies as $technology)
+{
+	if ($technology->isAnnounced())
+	{
+	  continue;
+	}
+	
+	$twitter->announceTechnology($technology);
+	print "{$technology->name} has been announced.\n";
+	sleep(10);
+}
+print "Script complete!\n";
+?>

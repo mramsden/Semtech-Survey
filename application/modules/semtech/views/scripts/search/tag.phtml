@@ -1,0 +1,15 @@
+<?php if (isset($this->tag)): ?>
+<?php if (isset($this->technologies)): ?>
+<p>The following technologies have been tagged with <?= Model_Tag::getTag($this->tag); ?>;</p>
+<table>
+	<tr><th>Name</th><th>Number of times tagged</th></tr>
+<?php foreach ($this->technologies as $techid => $technology): ?>
+	<tr><td><?= $technology['technology']->name; ?></td><td style="text-align: center;"><?= $technology['count']; ?></td><td><a href="<?= $this->url(array('techid' => $techid), 'technology'); ?>">Semtech Entry</a></td><td><a href="<?= $technology['technology']->url; ?>" onclick="javascript: window.open('<?= $technology['technology']->url; ?>'); return false;">Visit Page</a></td></tr>
+<?php endforeach; ?>
+</table>
+<?php else: ?>
+<p>No technologies have been tagged with <?= $this->tag; ?>.</p>
+<?php endif; ?>
+<?php else: ?>
+<p>No tag was specified.</p>
+<?php endif; ?>

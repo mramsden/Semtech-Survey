@@ -1,0 +1,20 @@
+<?php if (!is_null(Semtech_Model_User::getLoggedInUser())): ?>
+<a href="/technology/new">Add Technology</a>
+<?php endif; ?>
+<?php if (count($this->paginator)): ?>
+<?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml'); ?>
+<div class="technology-list">
+<?php $i = 0; ?>
+<?php foreach ($this->paginator as $technology): ?>
+<?php $i++; ?>
+<div class="technology-list-item<?= 0 == $i % 2 ? "-alt" : ""; ?>">
+	<h2><?= $technology->name; ?></h2>
+    <p><span style="font-weight: bold;">Description:</span><br/><?= strlen($technology->description) > 200 ? substr($technology->description, 0, 200)." ..." : $technology->description; ?></p>
+    <a href="<?= $this->url(array('techid' => $technology->id), 'technology'); ?>">View SemTech Entry</a> | <a href="<?= $technology->url; ?>" onclick="javascript: window.open('<?= $technology->url; ?>'); return false;">Go to <?= $technology->name; ?></a>
+</div>
+<?php endforeach; ?>
+</div>
+<?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml'); ?>
+<?php else: ?>
+<p>There are currently no technologies in the SemTech catalogue.</p>
+<?php endif; ?>

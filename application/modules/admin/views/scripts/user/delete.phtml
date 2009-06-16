@@ -1,0 +1,32 @@
+<form method="post">
+	<input type="hidden" name="userid" value="<?php $this->user->id; ?>"/>
+	<?php if (sizeof($this->technologies)): ?>
+	<fieldset>
+		<legend>Technologies</legend>
+		<p>
+			The user, <?php echo $this->user->getName(); ?>, has created 
+			<?php echo sizeof($this->technologies); ?> technologies, tick 
+			the boxes of the technologies you wish to delete.
+		</p>
+		<p>
+			<?php foreach ($this->technologies as $technology): ?>
+			<input type="checkbox" name="technologies[]" value="<?php echo $technology->id; ?>"/>
+			<?php echo $technology->name; ?>
+			<br/>
+			<?php endforeach; ?>
+		</p>
+	</fieldset>
+	<?php endif; ?>
+	<fieldset>
+		<legend>Confirm Action</legend>
+		<p>
+			Are you sure you want to delete <?php echo $this->user->getName(); ?>?<br/>
+			<span style="font-weight: bold;">Once confirmed this action cannot be undone.</span>
+		</p>
+		<p>
+			<input type="submit" name="confirmation" value="Cancel Action"/>
+			&nbsp;
+			<input type="submit" name="confirmation" value="Confirm Action"/>
+		</p>
+	</fieldset>
+</form>

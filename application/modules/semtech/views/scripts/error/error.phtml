@@ -1,0 +1,18 @@
+<p><?= $this->message; ?></p>
+<?php if (isset($this->error)): ?>
+<p>
+	Debug Message:<br/>
+	<?= $this->error->exception->getMessage(); ?>
+</p>
+<table>
+	<tr>
+		<td>File Name:</td><td><?= $this->error->exception->getFile(); ?></td>
+	</tr>
+	<tr>
+		<td>Line Number:</td><td><?= $this->error->exception->getLine(); ?></td>
+	</tr>
+	<tr>
+		<td>Stack Trace:</td><td><?= nl2br($this->error->exception->getTraceAsString()); ?></td>
+	</tr>
+</table>	
+<?php endif; ?>

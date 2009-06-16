@@ -1,0 +1,15 @@
+<div>
+  <h2>PHP Environment</h2>
+  <table>
+    <tr><td style="font-weight: bold;">Relation</td><td><?php echo php_sapi_name(); ?></td></tr>
+    <tr><td style="font-weight: bold;">Version</td><td><?php echo phpversion(); ?></td></tr>
+    <tr><td style="font-weight: bold;">OS</td><td><?php echo PHP_OS; ?></td></tr>
+    <?php if (strtoupper(substr(PHP_OS, 0, 3)) !== "WIN"): ?>
+    <?php $dat = getrusage(); ?>
+    <tr><td style="font-weight: bold;">Pagefaults</td><td><?php echo $dat["ru_majflt"]; ?></td></tr>
+    <tr><td style="font-weight: bold;">Swaps</td><td><?php echo $dat["ru_nswap"]; ?></td></tr>
+    <tr><td style="font-weight: bold;">User Time (ms)</td><td><?php echo $dat["ru_utime.tv_usec"]; ?></td></tr>
+    <tr><td style="font-weight: bold;">User Time (s)</td><td><?php echo $dat["ru_utime.tv_sec"]; ?></td></tr>
+    <?php endif; ?>
+  </table>
+</div>

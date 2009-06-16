@@ -1,0 +1,75 @@
+#!/usr/bin/env php
+<?php
+define('APP_ROOT', realpath(dirname(dirname(__FILE__))));
+set_include_path(APP_ROOT."/library"
+		.PATH_SEPARATOR.APP_ROOT."/application/models"
+		.PATH_SEPARATOR.get_include_path());
+
+require_once 'Zend/Loader.php';
+Zend_Loader::registerAutoload();
+
+$log = new Zend_Log(new Zend_Log_Writer_Stream(APP_ROOT.DIRECTORY_SEPARATOR.'var'.DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR.'crawler.log'));
+$indexpath = APP_ROOT.DIRECTORY_SEPARATOR."var".DIRECTORY_SEPARATOR."index";
+
+try
+{
+	$index = Zend_Search_Lucene::open($indexpath);
+	$log->info("Opened existing index in $indexpath");
+}
+catch (Zend_Search_Lucene_Exception $e)
+{
+	try
+	{
+		$index = Zend_Search_Lucene::create($indexpath);
+		$log->info("Created new index in $indexpath");
+	}
+	catch (Zend_Search_Lucene_Exception $e)
+	{
+		$log->error("Failed opening or creating index in $indexpath");
+		$log->error($e->getMessage());
+		echo "Unable to open or create index: {$e->getMessage()}";
+		exit(1);
+	}
+}
+
+$config = new Zend_Config_Xml(APP_ROOT.'/application/config/database.xml', 'development');
+Zend_Db_Table::setDefaultAdapter(Zend_Db::factory($config->database));
+
+$technologytable = new TechnologyTable();
+$technologies = $technologytable->fetchAll();
+$technologiesadded = 0;
+foreach ($technologies as $technology)
+{
+	if (!is_technology_indexed($technology, $index))
+	{
+		$doc = new Zend_Search_Lucene_Document();
+		$doc->addField(Zend_Search_Lucene_Field::Text('name', $technology->name));
+		$doc->addField(Zend_Search_Lucene_Field::UnStored('description', $technology->description));
+		$doc->addField(Zend_Search_Lucene_Field::Keyword('url', $technology->url));
+		$doc->addField(Zend_Search_Lucene_Field::Keyword('technologyid', $technology->id));
+	
+		$index->addDocument($doc);
+		
+		$technologiesadded++;
+		$log->info("Indexed {$technology->name}");
+	}
+}
+if ($technologiesadded)
+	$log->info("Added {$technologiesadded} technologies into the index.");
+$log->info("Optimizing index...");
+$index->optimize();
+$index->commit();
+
+
+$log->info("Done. Index now contains ".$index->numDocs()." documents");
+
+function is_technology_indexed($technology, &$index)
+{
+	$hits = $index->termDocs(new Zend_Search_Lucene_Index_Term($technology->id, 'technologyid'));
+	$matched = false;
+	if (count($hits))
+		$matched = true;
+
+	return $matched;
+}
+?>

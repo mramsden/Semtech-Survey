@@ -1,0 +1,12 @@
+<p>Welcome to the user account area of the SemTech survey. You must have an account and be logged in to be able to take part in the survey.</p>
+
+<h2>Available Actions</h2>
+<ul>
+<?php if (Zend_Auth::getInstance()->getIdentity()): ?>
+	<li><a href="/user/logout">Logout</a> - Logout of the website.</li>
+	<li><a href="/user/manage">Profile</a> - Manage your profile.</li>
+<?php else: ?>
+	<li><a href="/user/login">Login</a> - Login to the website.</li>	
+	<li><a href="/user/create">Create Account</a> - Create a new account.</li>
+<?php endif; ?>
+</ul>

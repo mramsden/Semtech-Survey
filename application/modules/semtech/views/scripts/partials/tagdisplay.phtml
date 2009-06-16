@@ -1,0 +1,37 @@
+<div class="techtags">
+    <h3>
+        <?php if (Semtech_Model_User::getLoggedInUser()): ?>
+        <span class="editlink"><a href="<?= $this->url(array('tagcat' => $this->tagcategory->id, 'techid' => $this->technology->id), 'technologytags'); ?>">[Edit]</a></span>
+        <?php endif; ?>
+        <?= $this->tagcategory->name; ?>
+    </h3>
+    <p class="tagcategorydescription"><?= $this->tagcategory->description; ?></p>
+    <?php if (isset($this->revision) && count($this->revision->getTags())): ?>
+    <?php
+    $tags = array(); 
+    foreach ($this->revision->getTags($this->tagcategory->name) as $tag ) {
+    	 $tags[] = "<a href=\"/search/tag/tag/{$tag->id}\">{$tag->tag}</a>";
+    }
+    ?><p><?= join(", ", $tags); ?></p> 
+    <?php endif; ?>
+    <?php if (isset($this->revision) && $this->tagcategory->name == "Aimed At"): ?>
+		<p>Scale of Usage: <?= $this->revision->getTechnologyUsage() ? $this->revision->getTechnologyUsage()->usage : "Unknown"; ?></p>
+	<?php endif; ?>
+	<?php if ($this->tagcategory->name == "Actors"): ?>
+        <h3>
+            <?php if (Zend_Auth::getInstance()->hasIdentity() && isset($this->revision)): ?>
+            <span class="editlink"><a href="<?= $this->url(array('techid' => $this->technology->id, 'revid' => $this->revision->id), "technologyactivity"); ?>">[Edit]</a></span>
+            <?php endif; ?>
+            Annotation/Content Creation Activity
+        </h3>
+		<?php if (isset($this->revision) && count($this->revision->getActivityLevels())): ?>
+		<table border="1">
+			<tr><th>Annotation</th><th>Creation</th></tr>
+			<?php foreach ($this->revision->getActivityLevels() as $actor => $levelarray): ?>
+			<tr><td colspan="2"><span style="font-weight: bold;"><?= $actor; ?></span></td></tr>
+			<tr><td><?= $levelarray['annotation']; ?></td><td><?= $levelarray['creation']; ?></td></tr>
+			<?php endforeach; ?>
+		</table>
+		<?php endif; ?>
+    <?php endif; ?>
+</div>

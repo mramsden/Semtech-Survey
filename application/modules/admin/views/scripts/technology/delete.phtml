@@ -1,0 +1,17 @@
+<form method="post">
+	<input type="hidden" name="techid" value="<?php echo $technology->id; ?>"/>
+	<fieldset>
+		<legend>Confirm Action</legend>
+		<p>
+			Are you sure you want to delete <?php echo $this->technology->name; ?>? 
+			It has <?php echo $this->technology->getRevisions()->count(); ?> revisions
+			attached.<br/>
+			<span style="font-weight: bold;">Once confirmed this action cannot be undone.</span>
+		</p>
+		<p>
+			<input type="submit" name="confirmation" value="Cancel Action"/>
+			&nbsp;
+			<input type="submit" name="confirmation" value="Confirm Action"/>
+		</p>
+	</fieldset>
+</form>

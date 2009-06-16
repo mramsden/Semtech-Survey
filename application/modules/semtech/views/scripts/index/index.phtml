@@ -1,0 +1,31 @@
+<?= $this->headStyle()->appendStyle("ul.tagcloud {
+	list-style-type: none;
+	padding: 0;
+	line-height: 2em;
+}
+ul.tagcloud li {
+	display: inline;
+	line-height: 1em;
+	white-space: nowrap;
+}
+ul.tagcloud li:after {
+	content: \",\";
+}
+ul.tagcloud li:last-child:after {
+	content: \"\";
+}
+ul.tagcloud .count {
+	font-size: 0.875em;
+	line-height: 1.714em;
+	color: #888;
+}"); ?>
+<h1>Welcome to the SemTech Survey</h1>
+<div style="float: right; width: 400px; border: 1px solid #F6F6F6; text-align: right; padding: 5px;">
+	<h2>Common Tags</h2>
+	<span style="font-size: 10px;"><?= $this->tagcloud; ?></span>
+</div>
+<div style="float:left; width: 350px">
+	<p>Welcome to the SemTech Survey! This application is a product of the <a href="http://semtech.ecs.soton.ac.uk">Semtech</a> project carried out by the Learning Societies Laboratory at the University of Southampton.</p>
+	<p>The SemTech Survey is designed to provide a searchable catalogue of semantic technologies used in Learning and Teaching. This website allows you to view the <a href="/technology">catalogue</a> of semantic technologies registered with the service and a description on how they <em>could</em> be used in an educational context. You can view semantic technologies used by each service and the value that semantic technologies add to it. You can also view relationships among semantic tools and services, references and comments.</p>
+	<p>To register a semantic tool or service or to add your own tags for existing ones all you need to do is create an <a href="/user">account</a> setting up a user name and password.</p>
+</div>

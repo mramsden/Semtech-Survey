@@ -1,0 +1,27 @@
+<p>You have been intentionally missed from this page.</p>
+<?php if (count($this->paginator)): ?>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml'); ?>
+<table>
+	<tr>
+		<th>User Name</th>
+		<th>User Email</th>
+		<th></th>
+		<th></th>
+	</tr>
+	<?php foreach ($this->paginator as $user): ?>
+	<tr>
+		<td><?php echo $user->name ? $user->name : "Unspecified"; ?></td>
+		<td><?php echo $user->email; ?></td>
+		<td><?php if($user->isAdmin()): ?> <a
+			href="/admin/user/admin/userid/<?= $user->id; ?>">Revoke Admin</a> <?php else: ?>
+		<a href="/admin/user/admin/userid/<?= $user->id; ?>">Grant Admin</a> <?php endif; ?>
+		</td>
+		<td><a href="/admin/user/delete/userid/<?php echo $user->id; ?>">Delete
+		User</a></td>
+	</tr>
+	<?php endforeach; ?>
+</table>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml'); ?>
+<?php else: ?>
+<p>There are currently no users registered to the Semtech Survey site.</p>
+<?php endif; ?>

@@ -1,0 +1,60 @@
+<h2><?= $this->technology->name; ?> - <a href="<?= $this->technology->url; ?>" onclick="javascript: window.open('<?= $this->technology->url; ?>'); return false;" title="Visit <?= $this->technology->name; ?>">Visit</a></h2>
+<div class="leftcontent">
+    <div class="technologyinfo">
+        <h2>
+            <?php if (Semtech_Model_User::getLoggedInUser() && $this->technology->getOriginalRevision()->isAuthor(Semtech_Model_User::getLoggedInUser())): ?>
+                <span class="editlink"><a href="<?= $this->url(array('techid' => $this->technology->id), 'technologyedit'); ?>" title="Edit the entry for <?= $this->technology->name; ?>">[Edit]</a></span>
+            <?php endif; ?>
+            Technology Details</h2>
+        <span style="font-weight: bold;">Description</span><br/>
+        <?= strlen($this->technology->description) > 50 ? substr($this->technology->description, 0, 50)." <a href=\"/technology/view/{$this->technology->id}/detail/description\" title=\"Read more about {$this->technology->name}\" onclick=\"javascript:window.open('/technology/view/{$this->technology->id}/detail/description'); return false;\">[...]</a>" : nl2br($this->technology->description); ?>
+        <table class="technologyinfo">
+            <tbody>
+                <tr><th>Version</th><td><?= $this->technology->version != ""?$this->technology->version:"Not Specified"; ?></td></tr>
+                <tr><th>Release Date</th><td><?= $this->technology->release_date != ""?date("jS F Y", $this->technology->release_date):"Not Specified"; ?></td></tr>
+                <tr><th>Date Added</th><td><?= date("jS F Y", $this->technology->getOriginalRevision()->getCreatedOn()); ?></td></tr>
+                <tr><th>License</th><td><?= $this->technology->license; ?></td></tr>
+            </tbody>
+        </table>
+        <span style="font-weight: bold;">Intellectual Property Rights</span><br/>
+        <?= $this->technology->iprights? (strlen($this->technology->iprights) > 50 ? substr($this->technology->iprights, 0, 50)." <a href=\"/technology/view/{$this->technology->id}/detail/iprights\" onclick=\"javascript:window.open('/technology/view/{$this->technology->id}/detail/iprights'); return false;\">[...]</a>" : nl2br($this->technology->iprights)) :"Not Specified"; ?><br/>
+        <span style="font-weight: bold;">Added by</span>&nbsp;<?php echo is_numeric($this->technology->getOriginalRevision()->createdby) ? Semtech_Model_User::getUser($this->technology->getOriginalRevision()->createdby)->getName() : $this->technology->getOriginalRevision()->createdby;  ?>
+    </div>
+</div>
+
+<div class="rightcontent">
+    <div class="technologymanagement">
+        <p>
+            <a href="<?= $this->url(array("techid" => $this->technology->id), 'technologydiscussion'); ?>">Discuss Technology</a> |
+            <a href="<?= $this->url(array("techid" => $this->technology->id), 'technologyrelations'); ?>">References &amp; Related Technologies</a>
+        </p>
+    </div>
+	<?php if (count($this->revisions)): ?>
+	<div class="revisionselector">
+		Select Tag Revision: <?= $this->formSelect("revisionselector", $this->revision->id, array('onchange' => "javascript: window.location = '/technology/{$this->technology->id}/'+document.getElementById('revisionselector').value;"), $this->revisions); ?>
+	</div>
+	<?php endif; ?>
+	<?php if (!is_null(Semtech_Model_User::getLoggedInUser()) && Semtech_Model_User::getLoggedInUser()->isAdmin()): ?>
+	<div class="adminfunctions">
+		<p><a href="/admin/technology/delete/techid/<?php echo $this->technology->id?>">Delete Technology</a> | Delete Revision</p>
+	</div>
+	<?php endif; ?>
+    <div class="technologytags">
+        <div class="tagsrightcolumn">
+            <div class="techtags">
+                <h4><?= $this->tagsrighttitle; ?></h4>
+            </div>
+            <?php foreach ($this->tagsright as $tagcategory): ?>
+            <?= $this->partial("partials/tagdisplay.phtml", array('tagcategory' => $tagcategory, 'technology' => $this->technology, 'revision' => $this->revision)); ?>
+            <?php endforeach; ?>
+        </div>
+        <div class="tagsleftcolumn">
+            <div class="techtags">
+                <h4><?= $this->tagslefttitle; ?></h4>
+            </div>
+            <?php foreach ($this->tagsleft as $tagcategory): ?>
+            <?= $this->partial("partials/tagdisplay.phtml", array('tagcategory' => $tagcategory, 'technology' => $this->technology, 'revision' => $this->revision)); ?>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>

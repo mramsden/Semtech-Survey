@@ -1,0 +1,7 @@
+<?php if (isset($this->error) && $this->error != ""): ?>
+<p>You must be logged in to access this page.</p>
+<?php else: ?>
+<p>Use the following form to update your profile.</p>
+<p>Please note, as a security precaution once you have updated your profile you will be logged out of the application. When you log back in your new details will take effect.</p>
+<?= $this->form; ?>
+<?php endif; ?>

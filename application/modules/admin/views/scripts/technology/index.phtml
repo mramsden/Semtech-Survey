@@ -1,0 +1,22 @@
+<?php if (count($this->paginator)): ?>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'technology/pagination_control.phtml'); ?>
+<table>
+	<tr><th>Technology Name</th><th>Technology URL</th><th></th></tr>
+	<?php foreach ($this->paginator as $technology): ?>
+	<tr>
+		<td>
+			<?php echo $technology->name ? $technology->name : "Unspecified"; ?>
+		</td>
+		<td>
+			<?php echo $technology->url; ?>
+		</td>
+		<td>
+			<a href="/admin/technology/delete/techid/<?php echo $technology->id; ?>">Delete Technology</a>
+		</td>
+	</tr>
+	<?php endforeach; ?>
+</table>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'technology/pagination_control.phtml'); ?>
+<?php else: ?>
+<p>There are currently no technologies registered on the Semtech Survey site.</p>
+<?php endif; ?>

@@ -1,0 +1,48 @@
+Semtech Survey Update Notes
+===========================
+
+This document describes any bugs encountered during the usage of the Semtech
+survey software. Additionally resolutions are also provided to describe what
+was done to correct them.
+
+Bug List
+========
+[SS#1] URLs do not redirect correctly
+[SS#2] Manage profile page does not render
+
+[SS#1] URLs do not redirect correctly
+Problem:
+If a the user has supplied a URL without http:// at the front then this causes
+browsers to take the link as being a relative link back into the site. As a
+result this causes the application to receive an invalid parameter, the url.
+
+Solution:
+Any models which are providing a URL field now have a regex test to ensure that
+http:// is present before returning the URL. If the URL does not have http:// at
+the front then it is prepended.
+
+Longer-Term:
+A cleaner longer-term solution is to re-factor out the regex functions and place
+them into a set of helpers which can be used throughout the application if needs
+be.
+
+Bug Raised: 22/12/2008
+Patch Applied: 23/12/2008
+---
+
+[SS#2] Manage profile page does not render
+Problem:
+The manager profile page does not render as expected. This is due to the fact that
+the application is attempting to generate the form from the user session object.
+Unfortunately this is not properly stored as a user object.
+
+Solution:
+Instead of using the user session object, the form will use the unique internal
+userid to select the appropriate data from the database. This means that the user can
+manage their profile and should only be able to update their own profile. This page
+will require a valid user to exist in the session. If not then they will be denied
+access.
+
+Bug Raised: 19/12/2008
+Patch Applied: 23/12/2008
+---

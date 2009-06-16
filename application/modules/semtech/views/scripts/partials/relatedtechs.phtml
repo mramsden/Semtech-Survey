@@ -1,0 +1,25 @@
+<?php if ($this->relations->count()): ?>
+<?php foreach ($this->relations as $relation): ?>
+<table style="background-color: #F6F6F6; padding: 5px;">
+	<tr>
+		<td colspan="2">
+			Added By: <?= Semtech_Model_User::getUser($relation->addedby)->name; ?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?= Semtech_Model_Technology::getTechnology($relation->object)->name; ?>
+			&nbsp;
+			<?= Semtech_Model_RelationDefinition::getRelationDefinition($relation->relation)->text; ?>
+		</td>
+		<td>
+			<a href="/technology/view/<?= Semtech_Model_Technology::getTechnology($relation->subject)->id; ?>">
+				<?= Semtech_Model_Technology::getTechnology($relation->subject)->name; ?>
+			</a>
+		</td>
+	</tr>
+</table>
+<?php endforeach; ?>
+<?php else: ?>
+<p>There are currently no related technologies.</p>
+<?php endif; ?>

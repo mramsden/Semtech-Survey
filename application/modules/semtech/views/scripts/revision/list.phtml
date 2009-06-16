@@ -1,0 +1,20 @@
+<p>Use the drop down box to select a technology to use.</p>
+<?php if (!isset($this->technology)): ?>
+<?= new Semtech_Form_Technology_Select($this->technologies); ?>
+<?php else: ?>
+<?= new Semtech_Form_Technology_Select($this->technologies, $this->technology->id); ?>
+<?php endif; ?>
+<?php if (isset($this->revisions) && $this->revisions->count()): ?>
+<table>
+	<thead>
+		<tr><th>Revision Owner</th><th>Creation Date</th></tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->revisions as $revision): ?>
+	<?php if ($revision->original == 0): ?>
+		<tr><td><?= User::getUser($revision->createdby)->name; ?></td><td><?= $revision->createdon; ?></td><td><a href="/revision/delete/id/<?= $revision->id; ?>">Delete</a></td></tr>
+	<?php endif; ?>
+	<?php endforeach; ?>
+	</tbody>
+</table>
+<?php endif; ?>

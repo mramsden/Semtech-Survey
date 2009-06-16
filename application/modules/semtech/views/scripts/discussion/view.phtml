@@ -1,0 +1,10 @@
+<?php $this->headScript()->appendFile("/js/discussion/view.js"); ?>
+<p><a href="<?= $this->url(array("techid" => $this->technology->id), "technology"); ?>">Back to entry</a></p>
+<p>Please note that this page automatically updates.</p>
+<?php if ($this->form): ?>
+	<?= $this->form; ?>
+<?php else: ?>
+	<input id="techid" type="hidden" value="<?= $this->technology->id; ?>"/>
+<?php endif; ?>
+<div id="comments">
+</div>

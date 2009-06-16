@@ -1,0 +1,302 @@
+a{
+	color:#547889;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+a:hover {
+	color: #cf85a9;	
+}
+
+body{	
+	padding:0.5em;
+	margin:0.5em;
+	background-color:#79ADC5;
+	font-family: arial, sans-serif;
+	line-height:2em;
+	font-size:80%;
+}
+
+.breadcrumbs{
+	float:left;
+	width:100%;
+	line-height:3em;
+	border-top:1px solid #e4e4e4;
+	border-bottom:1px solid #e4e4e4;
+	font-variant: small-caps;
+	margin-bottom:2em;
+
+}
+
+
+.container{
+	float:left;
+	background-color:#FFFFFF;
+	width:76em;
+	margin-bottom:1em;
+}
+
+html>body .container{
+	float:left;
+	background-color:#FFFFFF;
+	width:76em;	
+	padding-bottom:2em;
+	margin-bottom:1em;
+}
+
+.contentColumn{
+	float:left;
+	width:60em;
+	margin-top:1em;
+	margin-bottom:1em;
+}
+
+#datesBox{
+	margin-top:12em;
+	width:10em;
+	background-color:#f6f6f6;
+}
+
+.footer{
+	margin-top:2em;
+	text-align:right;
+	float:left;
+	width:100%;
+	line-height:3em;
+	border-top:1px solid #e4e4e4;
+	border-bottom:1px solid #e4e4e4;	
+	font-size:70%;
+
+}
+
+h1{
+	font-size:150%;
+	color:#547889;
+	line-height:1.5em;
+}
+
+h2{
+	font-size:130%;
+}
+
+h3{
+	font-size:100%;
+	font-weight:bold;
+
+}
+.logo{
+	padding:1em;
+	margin-top:0px;
+	float:left;
+	width:100%;
+	text-align:center;
+	margin-bottom:0px;
+}
+
+#menuBox{
+	width:11em;
+	background-color:#f6f6f6;	
+	clear:both;
+}
+
+html>body #menuBox{
+	width:11em;
+	background-color:#f6f6f6;	
+	clear:both;
+}
+
+.menuIcon{
+	margin-right:1em;
+}
+
+.menuItem{
+	padding-top:0.5em;
+	padding-left:0.5em;
+
+
+}
+
+.menuColumn{
+	width:11em;
+	height:100%;
+	float:left;
+	margin-left:1em;
+	margin-right:1em;
+	margin-top:1em;
+	margin-bottom:1em;
+}
+
+.menuSpacer{
+	clear:right;
+	float:left;
+	width:1em;
+	height:12em;
+	background-color:#ffffff;
+}
+
+.projectDates{
+	padding:0.5em;
+	font-size:70%;
+	line-height:2em;
+}
+
+.projectUpdates{
+	padding:1em;	
+	line-height:2em;
+}
+
+#sidebarBox{
+	width:10em;
+	background-color:#f6f6f6;
+}
+
+.sidebarDate{
+	font-size:70%;
+	line-height:1em;
+	border-bottom: 1px solid #e4e4e4;
+}
+
+.sidebarSmallText{
+	font-size:70%;
+	margin-bottom:1em;
+}
+
+.updateColumn{	
+	width:10em;
+	height:100%;
+	float:left;
+	top: 200px;
+	margin-left:1em;
+	margin-top:1em;
+	margin-bottom:1em;
+	margin-right:1em;
+}
+
+.updatesTitle{
+	margin-bottom:1em;
+}
+
+div.message {
+	width: 100%;
+	float: left;
+	padding: 5px;
+	background-color: #F6F6F6;
+    margin: 10px;
+}
+
+div.message ul {
+	list-style: none;
+}
+
+div.technology-list {
+	border: 1px solid #79ADC5;
+}
+
+div.technology-list-item {
+    background-color: #F6F6F6;
+    margin-bottom: 5px;
+	padding: 5px;
+}
+
+div.technology-list-item-alt {
+	background-color: #FFFFFF;
+	margin-bottom: 5px;
+	padding: 5px;
+}
+
+div.technologymanagement p {
+    background-color: #F6F6F6;
+    width: 350px;
+    padding: 10px;
+}
+
+div.content h2 {
+    clear:both;
+}
+
+div.leftcontent {
+    float: left;
+}
+
+div.leftcontent div.technologyinfo {
+    width: 250px;
+    padding: 10px;
+    background-color: #F6F6F6;
+}
+
+div.rightcontent {
+    float: right;
+}
+
+table.technologyinfo th {
+    text-align: left;
+}
+
+form {
+    background-color: #F6F6F6;
+}
+
+label.required {
+	font-weight: bold;
+}
+
+span.editlink {
+    float: right;
+}
+
+p.tagcategorydescription {
+    font-style: italic;
+}
+
+/* Technology tags style definition. */
+div.technologytags {
+    width: 440px;
+}
+
+div.technologytags div {
+    background-color: #F6F6F6;
+    width: 205px;
+}
+
+div.technologytags div.tagsrightcolumn {
+    float: right;
+}
+
+div.technologytags div.tagsleftcolumn {
+    float: left;
+}
+
+div.technologytags div div.techtags {
+    padding: 10px;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+div.technologytags div div.techtags h3 {
+    border-bottom: 1px solid #000000;
+}
+/* End style tags definition. */
+
+div.comment {
+	background-color: #F6F6F6;
+	margin: 10px;
+	padding: 5px;
+}
+
+div.commentreply {
+	background-color: #C3C3C3;
+	margin: 10px;
+	padding: 5px;
+}
+
+span.commentheader {
+	font-weight: bold;
+}
+
+span.commentcontrols {
+	float: right;
+}
+
+.deleted {
+	color: #CCCCCC;
+}

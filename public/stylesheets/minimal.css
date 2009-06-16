@@ -1,0 +1,19 @@
+body{	
+	padding:0.5em;
+	margin:0.5em;
+	background-color:#79ADC5;
+	font-family: arial, sans-serif;
+	line-height:2em;
+	font-size:80%;
+}
+
+div.content {
+	background-color: #FFFFFF;
+	padding: 1em;
+}
+
+a{
+	color:#547889;
+    text-decoration: underline;
+    cursor: pointer;
+}

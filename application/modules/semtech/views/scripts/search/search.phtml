@@ -1,0 +1,21 @@
+<?php if (isset($this->searchTerm)): ?>
+<p>You searched for <span style="font-style: italic;"><?= $this->searchTerm; ?></span>.</p>
+<?php if (isset($this->searchResults)): ?>
+<p><?= count($this->searchResults); ?> results were found.</p>
+<div class="technology-list">
+<?php $i = 0; ?>
+<?php foreach ($this->searchResults as $technology): ?>
+<div class="technology-list-item<?= 0 == $i % 2 ? "-alt" : ""; ?>">
+	<h2><?= $technology->name; ?></h2>
+	<p><span style="font-weight: bold;">Description:</span><br/><?= strlen($technology->description) > 200 ? substr($technology->description, 0, 200)." ..." : $technology->description; ?></p>
+	<a href="<?= $this->url(array('techid' => $technology->id), 'technology'); ?>">View SemTech Entry</a> | <a href="<?= $technology->url; ?>" onclick="javascript: window.open('<?= $technology->url; ?>'); return false;">Go to <?= $technology->name; ?></a>
+</div>
+<?php $i++; ?>
+<?php endforeach; ?>
+</div>
+<?php else: ?>
+<p>No search results were found for your query.</p>
+<?php endif; ?>
+<?php else: ?>
+<p>No search term was submitted please use the search box on the right-hand side of the page.</p>
+<?php endif; ?>

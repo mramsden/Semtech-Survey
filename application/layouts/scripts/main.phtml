@@ -1,0 +1,61 @@
+<?php $user = Semtech_Model_User::getLoggedInUser(); ?>
+<?php echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<?php echo $this->headTitle(); ?>
+	<?php echo $this->headLink(); ?>
+	<?php echo $this->headScript(); ?>
+</head>
+<body>
+	<div class="container">
+		<div class="menuColumn">
+			<div class="menuSpacer"></div>
+			<div id="menuBox">
+				<div class="menuItem">
+                			<img src="/images/home_icon.png" alt="*" /> <a href="/">Home</a>
+        			</div>
+        			<div class="menuItem">
+                			<img src="/images/people_icon.png" alt="*" /> <a href="/user" title="Create or manage your account">Account</a>
+			       	</div>					
+				<div class="menuItem">
+					<img src="/images/technologies_icon.png" alt="*" /> <a href="/technology" title="View or create technology entries in the survey">Technologies List</a>
+				</div>
+				<div class="menuItem">
+					<img src="/images/reports_icon.png" alt="*" /> <a href="/report" title="View reports about data collected by the survey so far">Survey Reports</a>
+				</div>
+				<?php if (!is_null($user) && $user->isAdmin()): ?>
+				<div class="menuItem">
+					<a href="/admin" title="Manage the Semtech Survey website.">Site Administration</a>
+				</div>
+				<?php endif; ?>
+			</div>
+		</div>
+		<div class="contentColumn">
+			<div class="logo"><h1><img src="/images/logo.png" alt="SemTech"/></h1></div>
+			<div class="breadcrumbs" id="breadcrumbs">
+			<span style="float: right"; ?>
+				<form action="/search/search" method="post">
+					<input type="text" name="searchTerm"/>
+					<input type="submit" value="" style="border-style: none; background: url('/images/searchbutton.gif') no-repeat; width: 24px; height: 22px;"/>
+				</form>
+			</span>
+			<?php if (!is_null(Semtech_Model_User::getLoggedInUser())): ?>
+        		Welcome, <a href="/user/manage" title="Click here to manage your profile"><?php echo isset($user->name) && $user->name != '' ? $user->name : $user->email ?></a>! <a href="/user/logout" title="Click here to logout">Logout</a>
+			<?php else: ?>
+        		Welcome! <a href="/user/login">Login</a> | <a href="/user/create" title="Click here to create a new account.">Create Account</a>
+			<?php endif; ?>
+			</div>
+			<h1><?php echo $this->title; ?></h1>
+			<?php if ($this->messages): ?>
+			<?php echo $this->partial("partials/flashmessage.phtml", array('messages' => $this->messages))?>
+			<?php endif; ?>
+			<?php echo $this->layout()->content; ?>
+			<div class="footer">
+				<a href="/index/contact">Contact Us</a> | &copy; 2008 <a href="http://www.southampton.ac.uk">University of Southampton</a>
+				<br/>
+				The Semtech Survey application is powered by <a href="http://framework.zend.com">Zend Framework</a> <?= Zend_Version::VERSION; ?>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

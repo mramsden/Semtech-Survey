@@ -1,0 +1,24 @@
+<?php if ($this->references->count()): ?>
+<table>
+	<tr>
+		<th>Submitted By</th>
+		<th>Reference</th>
+		<th></th>
+	</tr>
+	<?php foreach ($this->references as $reference): ?>
+	<tr>
+		<td>
+			<?= Semtech_Model_User::getUser($reference->user)->name; ?>
+		</td>
+		<td>
+			<?= $reference->reference; ?>
+		</td>
+		<td>
+			<?= $reference->url != "" ? "<a href=\"{$reference->url}\">Link</a>" : ""; ?>
+		</td>
+	</tr>
+	<?php endforeach; ?>
+</table>
+<?php else: ?>
+<p>There are currently no references.</p>
+<?php endif; ?>
