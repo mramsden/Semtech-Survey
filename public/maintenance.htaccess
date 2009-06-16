@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule ^.*$ maintenance.html [NC,L]
