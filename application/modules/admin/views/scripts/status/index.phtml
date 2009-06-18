@@ -12,4 +12,8 @@
     <tr><td style="font-weight: bold;">User Time (s)</td><td><?php echo $dat["ru_utime.tv_sec"]; ?></td></tr>
     <?php endif; ?>
   </table>
+  <h2>Twitter Module</h2>
+  <table>
+    <tr><th>Remaining API calls this hour</th><td><?php echo $this->remainingTwitterApiCalls; ?></td></tr>
+  </table>
 </div>
