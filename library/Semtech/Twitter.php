@@ -88,16 +88,26 @@ class Semtech_Twitter
 	 * @return void
 	 * @author Marcus Ramsden
 	 */
-	public function getStatusMessages($count = 3, $cache_time = 3600)
+	public function getStatusMessages($count = 5, $cache_time = 3600)
 	{
-	  $tweets = array();
-	  $twitter_response = $this->_twitter->statusUserTimeline(array('count' => $count));
-	  if ($twitter_response->isSuccess())
+	  // Initialize the cache for tweets
+	  $cache = Zend_Cache::factory('Core', 'File', array('lifeTime' => $cache_time, 'automatic_serialization' => 'true'), array('cacheDir' => APPLICATION_PATH.'/../var/cache'));
+	  
+	  $tweets = $cache->load('twitter_tweets');
+	  
+	  if ($cache_time == 0 || !$tweets || sizeof($tweets) < $count)
 	  {
-	    foreach ($twitter_response->statuses as $status)
-	    {
-	      $tweets[] = array("user" => $status->user->name, "message" => $status->text);
-	    }
+	    Zend_Registry::get("log")->info("Cache Miss: Querying Twitter for tweets...");
+  	  $twitter_response = $this->_twitter->statusUserTimeline(array('count' => $count));
+  	  $tweets = array();
+  	  if ($twitter_response->isSuccess())
+  	  {
+  	    foreach ($twitter_response->statuses as $status)
+  	    {
+  	      $tweets[] = array("user" => (string)$status->user->name, "message" => (string)$status->text);
+  	    }
+  	  }
+  	  $cache->save($tweets, 'twitter_tweets');
 	  }
 	  
 	  return $tweets;
