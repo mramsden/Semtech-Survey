@@ -21,6 +21,15 @@ ul.tagcloud .count {
 }"); ?>
 <h1>Welcome to the SemTech Survey</h1>
 <div style="float: right; width: 400px; border: 1px solid #F6F6F6; text-align: right; padding: 5px;">
+	<h2>SemTech Twitter Feed <a href="" title="Click here to follow us!"><img src="/images/twitter_boxed_48.png" align="middle" border="0"/></a></h2>
+	<div id="twitter_feed">
+	<?php foreach ($this->tweets as $tweet): ?>
+	  <div class="frontpage_tweet">
+	    <span style="font-weight: bold;"><?php echo $tweet['user']; ?> said:</span><br/>
+	    <?php echo $tweet['message']; ?>
+	  </div>
+	<?php endforeach; ?>
+	</div>
 	<h2>Common Tags</h2>
 	<span style="font-size: 10px;"><?= $this->tagcloud; ?></span>
 </div>
