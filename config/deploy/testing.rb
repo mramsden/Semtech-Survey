@@ -1,1 +1,0 @@
-set :deploy_to, "/var/www/semtech-survey-beta"
