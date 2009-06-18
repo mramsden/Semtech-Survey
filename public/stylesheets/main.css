@@ -300,3 +300,7 @@ span.commentcontrols {
 .deleted {
 	color: #CCCCCC;
 }
+
+div.frontpage_tweet {
+  border-bottom: 1px solid #e4e4e4;
+}

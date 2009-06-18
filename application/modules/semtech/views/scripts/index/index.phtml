@@ -19,9 +19,15 @@ ul.tagcloud .count {
 	line-height: 1.714em;
 	color: #888;
 }"); ?>
+<?= $this->headScript()->appendFile("/js/lib/jquery.cycle.all.min.js"); ?>
+<?= $this->headScript()->appendScript("
+  $(function() {
+    $(\"div#twitter_feed\").cycle('scrollUp');
+  })
+"); ?>
 <h1>Welcome to the SemTech Survey</h1>
 <div style="float: right; width: 400px; border: 1px solid #F6F6F6; text-align: right; padding: 5px;">
-	<h2>SemTech Twitter Feed <a href="" title="Click here to follow us!"><img src="/images/twitter_boxed_48.png" align="middle" border="0"/></a></h2>
+	<h2>SemTech Twitter Feed <img src="/images/twitter_boxed_48.png" align="middle" border="0"/><br/><a href="http://twitter.com/semtech" title="Click here to follow us!"><span style="font-size: small;">Follow Us</span></a></h2>
 	<div id="twitter_feed">
 	<?php foreach ($this->tweets as $tweet): ?>
 	  <div class="frontpage_tweet">
