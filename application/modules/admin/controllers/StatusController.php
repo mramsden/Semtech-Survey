@@ -34,6 +34,8 @@ class Admin_StatusController extends Zend_Controller_Action
 	public function indexAction()
 	{
 	  $this->view->title = "System Status";
+	  $twitter = new Semtech_Twitter();
+	  $this->view->remainingTwitterApiCalls = $twitter->getRemainingApiCalls();
 	}
 	
 }

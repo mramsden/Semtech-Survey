@@ -1,15 +1,6 @@
 <?php
-class Semtech_IndexController extends Zend_Controller_Action
+class Semtech_IndexController extends Semtech_Controller_Action
 {
-	public function init()
-	{
-		$this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        if ($this->flashMessenger->hasMessages())
-        {
-        	$this->view->messages = $this->flashMessenger->getMessages();
-        	$this->flashMessenger->clearMessages();
-        }
-	}
 	
 	public function indexAction()
 	{

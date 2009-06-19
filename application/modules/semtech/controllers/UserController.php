@@ -1,13 +1,13 @@
 <?php
-class Semtech_UserController extends Zend_Controller_Action
+class Semtech_UserController extends Semtech_Controller_Action
 {
 	protected $_request, $_forms;
 
 	public function init()
 	{
-		$this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-		$this->view->messages = $this->flashMessenger->getMessages();
-		$this->flashMessenger->clearMessages();
+		//$this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
+		//$this->view->messages = $this->flashMessenger->getMessages();
+		//$this->flashMessenger->clearMessages();
 	}
 
 	public function indexAction()
@@ -39,11 +39,11 @@ class Semtech_UserController extends Zend_Controller_Action
 						Zend_Session::rememberMe(1209600);
 					}
 					
-					$this->flashMessenger->addMessage("You are now logged in as ".($user->name != '' ? $user->name : '('.$user->email.')').".");
+					$this->_flashMessenger->addMessage("You are now logged in as ".($user->name != '' ? $user->name : '('.$user->email.')').".");
 		
 					$this->_redirect("/user");
 				} else {
-					$this->flashMessenger->addMessage("Credentials not recognised.");
+					$this->_flashMessenger->addMessage("Credentials not recognised.");
 					$this->_redirect("/user");
 				}
 			}
@@ -54,24 +54,22 @@ class Semtech_UserController extends Zend_Controller_Action
 
 	public function logoutAction()
 	{
-		$this->flashMessenger->addMessage("You are now logged out.");
+		$this->_flashMessenger->addMessage("You are now logged out.");
 		Zend_Auth::getInstance()->clearIdentity();
 		Zend_Session::forgetMe();
-		$this->_redirect('/');
+		$this->getHelper("Redirector")->gotoSimple("index", "index");
 	}
 	
 	public function createAction()
 	{
 		if (Zend_Auth::getInstance()->hasIdentity()) {
-			$this->flashMessenger->addMessage("You are already logged in and do not need to create an additional account.");
+			$this->_flashMessenger->addMessage("You are already logged in and do not need to create an additional account.");
 			$this->getHelper('Redirector')->gotoSimple("index");
 		}
 		
 		$this->view->title = "Create Account";
 		$form = new Semtech_Form_User_Create();
 
-		
-		
 		if ($this->getRequest()->isPost()) {
 			if ($form->isValid($this->getRequest()->getPost())) {
 				$users = new Semtech_Model_DbTable_Users();
@@ -81,7 +79,7 @@ class Semtech_UserController extends Zend_Controller_Action
 				$newUser->email = $form->getValue('email');
 				$newUser->created_at = date("Y-m-d H:i:s", time());
 				$newUser->save();
-				$this->flashMessenger->addMessage("Successfully created account for ".($newUser->name != '' ? $newUser->name : $newUser->email)."!");
+				$this->_flashMessenger->addMessage("Successfully created account for ".($newUser->name != '' ? $newUser->name : $newUser->email)."!");
 				$this->_redirect("/user");
 			}
 		}

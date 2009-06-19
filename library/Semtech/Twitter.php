@@ -55,6 +55,18 @@ class Semtech_Twitter
 	}
 	
 	/**
+	 * This function returns how many more API calls can be made in the next
+	 * hour.
+	 *
+	 * @return int
+	 * @author Marcus Ramsden
+	 */
+	public function getRemainingApiCalls()
+	{
+	  return $this->_requestsLeft;
+	}
+	
+	/**
 	 * This function is responsible for shortening the url to the technology and
 	 * then creating the message that is to be posted to Twitter.
 	 *
@@ -104,7 +116,7 @@ class Semtech_Twitter
   	  {
   	    foreach ($twitter_response->statuses as $status)
   	    {
-  	      $tweets[] = array("user" => (string)$status->user->name, "message" => (string)$status->text);
+  	      $tweets[] = array("user" => (string)$status->user->name, "message" => $this->_parseLinks((string)$status->text));
   	    }
   	  }
   	  $cache->save($tweets, 'twitter_tweets');
@@ -122,10 +134,36 @@ class Semtech_Twitter
 	public function _sendMessage($msg)
 	{
 		if ($this->_requestsLeft == 0)
-			throw new Zend_Exception("Number of requests exceeded for this hour.");
+		{
+		  Zend_Log::get("log")->crit(__CLASS__.": No more API calls can be made this hour.");
+      throw new Zend_Exception("Number of requests exceeded for this hour.");
+		}
 			
 		$this->_twitter->statusUpdate($msg);
 		$this->_requestsLeft = $this->_requestsLeft - 1;
+	}
+	
+	/**
+	 * This function will look at the supplied text. If it sees any urls then it will
+	 * wrap them with anchor tags.
+	 *
+	 * @param string $text 
+	 * @return string
+	 * @author Marcus Ramsden
+	 */
+	private function _parseLinks($text)
+	{
+    if (preg_match_all('/((ht|f)tps?:\/\/([\w\.]+\.)?[\w-]+(\.[a-zA-Z]{2,4})?[^\s\r\n\(\)"\'<>\,\!]+)/si', $text, $urls))
+    {
+
+      foreach (array_unique($urls[1]) AS $url)
+      {
+        $text = str_replace($url, '<a href="'. $url .'">'. $url .'</a>', $text);
+      }
+    
+    }
+
+    return $text;
 	}
 }
 ?>
