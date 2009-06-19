@@ -17,6 +17,9 @@ class Admin_Model_Revision extends Zend_Db_Table_Row
 		
 		$tat = new Semtech_Model_DbTable_TechnologyAnnotation();
 		$tat->delete($tat->getAdapter()->quoteInto("revision = ?", $this->id));
+		
+		$tut = new Semtech_Model_DbTable_TechnologyUsage();
+		$tut->delete($tut->getAdapter()->quoteInto("revision = ?", $this->id));
 	}
 	
 }
