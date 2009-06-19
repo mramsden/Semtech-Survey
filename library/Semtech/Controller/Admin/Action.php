@@ -20,6 +20,10 @@ class Semtech_Controller_Admin_Action extends Semtech_Controller_Action
     $user = Semtech_Model_User::getLoggedInUser();
 		if ($user == null)
 		{
+		  $this->getHelper("ReturnToTarget")->setReturnToTarget(
+		    $this->getRequest()->getActionName(), 
+		    $this->getRequest()->getControllerName(), 
+		    $this->getRequest()->getModuleName());
 		  $this->getHelper("Redirector")->gotoSimple("login", "user", "semtech");
 		}
 		if (!$user->isAdmin())

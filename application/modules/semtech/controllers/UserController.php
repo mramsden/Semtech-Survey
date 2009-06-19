@@ -40,11 +40,17 @@ class Semtech_UserController extends Semtech_Controller_Action
 					}
 					
 					$this->_flashMessenger->addMessage("You are now logged in as ".($user->name != '' ? $user->name : '('.$user->email.')').".");
-		
-					$this->_redirect("/user");
+				  if ($this->getHelper("ReturnToTarget")->returnToTargetExists())
+      		{
+      		  $returnToTarget = $this->getHelper("ReturnToTarget")->getReturnToTargetArray();
+      		  $this->getHelper("Redirector")->gotoSimple($returnToTarget['action'], $returnToTarget['controller'], $returnToTarget['module']);
+      		}
+      		else
+      		{
+      		  $this->getHelper("Redirector")->gotoSimple("index", "index");
+      		}
 				} else {
 					$this->_flashMessenger->addMessage("Credentials not recognised.");
-					$this->_redirect("/user");
 				}
 			}
 		}

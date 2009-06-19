@@ -271,6 +271,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	{
 		$this->_logger->info('Bootstrap '.__METHOD__);
 		Zend_Controller_Action_HelperBroker::addHelper(new Semtech_Controller_Helper_Environment());
+		Zend_Controller_Action_HelperBroker::addHelper(new Semtech_Controller_Helper_ReturnToTarget());
 	}
 
 }
