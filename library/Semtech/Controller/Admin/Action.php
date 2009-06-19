@@ -1,12 +1,18 @@
 <?php
 class Semtech_Controller_Admin_Action extends Semtech_Controller_Action
 {
+  
   public function preDispatch()
-  {
-    parent::preDispatch();
-    
-    $this->registerCallback("checkAdminUserLoggedIn");
-  }
+	{
+	  parent::preDispatch();
+	  $this->registerCallback("checkAdminUserLoggedIn");
+		$this->view->headTitle("Admin Area");
+	}
+	
+	public function postDispatch()
+	{
+		$this->view->headTitle($this->view->title);
+	}
   
   /**
    * Checks if an admin user is logged in. This should be run for 
@@ -20,10 +26,7 @@ class Semtech_Controller_Admin_Action extends Semtech_Controller_Action
     $user = Semtech_Model_User::getLoggedInUser();
 		if ($user == null)
 		{
-		  $this->getHelper("ReturnToTarget")->setReturnToTarget(
-		    $this->getRequest()->getActionName(), 
-		    $this->getRequest()->getControllerName(), 
-		    $this->getRequest()->getModuleName());
+		  $this->getHelper("ReturnToTarget")->setReturnToTarget($this->getRequest()->getRequestUri());
 		  $this->getHelper("Redirector")->gotoSimple("login", "user", "semtech");
 		}
 		if (!$user->isAdmin())

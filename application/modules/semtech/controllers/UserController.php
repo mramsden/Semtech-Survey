@@ -42,8 +42,7 @@ class Semtech_UserController extends Semtech_Controller_Action
 					$this->_flashMessenger->addMessage("You are now logged in as ".($user->name != '' ? $user->name : '('.$user->email.')').".");
 				  if ($this->getHelper("ReturnToTarget")->returnToTargetExists())
       		{
-      		  $returnToTarget = $this->getHelper("ReturnToTarget")->getReturnToTargetArray();
-      		  $this->getHelper("Redirector")->gotoSimple($returnToTarget['action'], $returnToTarget['controller'], $returnToTarget['module']);
+      		  $this->getHelper("Redirector")->gotoUrl($this->getHelper("ReturnToTarget")->getReturnToTarget());
       		}
       		else
       		{

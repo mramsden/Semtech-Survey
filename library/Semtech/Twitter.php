@@ -126,6 +126,19 @@ class Semtech_Twitter
 	}
 	
 	/**
+	 * Flushes the status message cache. Returns true on success.
+	 *
+	 * @return boolean
+	 * @author Marcus Ramsden
+	 */
+	public function flushStatusMessages()
+	{
+	  $cache = Zend_Cache::factory('Core', 'File', array('lifeTime' => $cache_time, 'automatic_serialization' => 'true'), array('cacheDir' => APPLICATION_PATH.'/../var/cache'));
+	  
+	  return $cache->remove('twitter_tweets'); 
+	}
+	
+	/**
 	 * This function is responsible for updating the account's Twitter status.
 	 *
 	 * @param string $msg
