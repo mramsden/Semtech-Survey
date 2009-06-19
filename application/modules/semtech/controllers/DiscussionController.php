@@ -8,15 +8,15 @@ class Semtech_DiscussionController extends Semtech_Controller_Action
 		$this->view->comments = Semtech_Model_Comment::fetchComments($this->getTechId());
 		$this->view->title = "Technology Discussion: {$this->view->technology->name}";
 		if (Zend_Auth::getInstance()->hasIdentity())
-			$this->view->form = new Semtech_Form_Discussion_Add($this->techid, Zend_Auth::getInstance()->getStorage()->read());
+			$this->view->form = new Semtech_Form_Discussion_Add($this->getTechId(), Zend_Auth::getInstance()->getStorage()->read());
 	}
 	
 	public function listAction()
 	{
-		if ($this->request->isXmlHttpRequest())
+		if ($this->getRequest()->isXmlHttpRequest())
 		{
-			$lastcomment = $this->request->getParam('lastcomment', null);
-			$serviceargs = array('techid' => $this->request->getParam('techid'));
+			$lastcomment = $this->getRequest()->getParam('lastcomment', null);
+			$serviceargs = array('techid' => $this->getTechId());
 			if (!is_null($lastcomment) && $lastcomment > 0)
 				array_push($serviceargs, array('lastcomment' => $lastcomment));
 			
@@ -29,13 +29,13 @@ class Semtech_DiscussionController extends Semtech_Controller_Action
 	
 	public function addAction()
 	{
-		if ($this->request->isPost() && $this->request->isXmlHttpRequest())
+		if ($this->getRequest()->isPost() && $this->getRequest()->isXmlHttpRequest())
 		{
 			$args = array(
-				'techid' => $this->request->getPost("techid"),
-				'userid' => $this->request->getPost("userid"),
-				'comment' => $this->request->getPost("comment"),
-				'replyto' => $this->request->getPost("replyto")
+				'techid' => $this->getTechId(),
+				'userid' => $this->getRequest()->getPost("userid"),
+				'comment' => $this->getRequest()->getPost("comment"),
+				'replyto' => $this->getRequest()->getPost("replyto")
 			);
 			$discussionservice = new Semtech_Service('Semtech_Service_Discussion_Service', 'addComment', $args);
 			$discussionservice->handle();
@@ -50,7 +50,7 @@ class Semtech_DiscussionController extends Semtech_Controller_Action
 	
 	private function getTechId()
 	{
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
 			return $this->getRequest()->getPost('techid');
 		}
