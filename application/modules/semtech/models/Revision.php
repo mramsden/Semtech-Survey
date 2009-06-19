@@ -208,9 +208,9 @@ class Semtech_Model_Revision extends Zend_Db_Table_Row
     return $hastag;
   }
 
-  public function getTags($category = null)
+  public function getTags($category)
   {
-    if (is_null($this->_tags))
+    if (!is_null($category) && !isset($this->_tags[$category]))
     {
       $ttt = new Semtech_Model_DbTable_TechnologyTags();
       $select = $ttt->select()->where("revision = ?", $this->id)->where("technology = ?", $this->technology);
