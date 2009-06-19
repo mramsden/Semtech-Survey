@@ -123,7 +123,7 @@ class Semtech_Model_Revision extends Zend_Db_Table_Row
         $log->alert("Unable to find an author for this revision, Revision ID: ".$this->id);
       }
       
-      $this->_author = $author
+      $this->_author = $author;
     }
 
     return $this->_author;

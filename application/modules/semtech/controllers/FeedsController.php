@@ -1,5 +1,5 @@
 <?php
-class Semtech_FeedsController extends Zend_Controller_Action
+class Semtech_FeedsController extends Semtech_Controller_Action
 {
 
 	public function init()

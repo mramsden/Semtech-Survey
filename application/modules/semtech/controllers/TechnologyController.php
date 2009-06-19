@@ -1,17 +1,6 @@
 <?php
-class Semtech_TechnologyController extends Zend_Controller_Action
+class Semtech_TechnologyController extends Semtech_Controller_Action
 {
-	
-	public function init()
-	{
-		$this->redirector = $this->_helper->getHelper('Redirector');
-		
-		$this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-		$this->view->messages = $this->flashMessenger->getMessages();
-		$this->flashMessenger->clearMessages();
-		
-		$this->request = $this->getRequest();
-	}
 	
 	public function indexAction()
 	{
@@ -21,7 +10,7 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 		
 		// Create a paginator for the list.
 		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbTableSelect($technologytable->select()->order('name')));
-		$paginator->setCurrentPageNumber($this->request->getParam('page'));
+		$paginator->setCurrentPageNumber($this->getRequest()->getParam('page'));
 		$paginator->setPageRange(5);		
 		
 		$this->view->paginator = $paginator;
@@ -32,18 +21,18 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 		$techid = $this->_getTechId();
 		if ($techid == "") 
 		{
-			$this->flashMessenger->addMessage("Unable to find technology.");
-			$this->redirector->gotoSimple("index");
+			$this->_flashMessenger->addMessage("Unable to find technology.");
+			$this->getHelper("Redirector")->gotoSimple("index");
 		}
 		
 		$technology = Semtech_Model_Technology::getTechnology($techid);
 		if (!$technology)
 		{
-			$this->flashMessenger->addMessage("Unable to find technology.");
-			$this->redirector->gotoSimple("index");
+			$this->_flashMessenger->addMessage("Unable to find technology.");
+			$this->getHelper("Redirector")->gotoSimple("index");
 		}
 		
-		if ($this->request->getParam('detail') != "")
+		if ($this->getRequest()->getParam('detail') != "")
 		{
 			$detailfield = $this->request->getParam("detail");
 			$fields = $technology->toArray();
@@ -64,7 +53,7 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 		
 		$this->view->technology = $technology;
 		$this->view->revision = $technology->getDefaultRevision();
-		$revid = $this->request->getParam("revid", null);
+		$revid = $this->getRequest()->getParam("revid", null);
 		if ($revid) {
 			$this->view->revision = Semtech_Model_Revision::getRevision($revid);
 		}
@@ -96,9 +85,9 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 		
 		$form = new Semtech_Form_Technology_Create();
 		
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
-			if ($form->isValid($this->request->getPost()))
+			if ($form->isValid($this->getRequest()->getPost()))
 			{
 				// Create the new technology and the original revision.
 				$newTechnology = Semtech_Model_Technology::newTechnology($form->getValue('name'), $form->getValue('url'), $form->getValue('description'), $form->getValue('license'), $form->getValue('version'), $form->getValue('release_date'), $form->getValue('iprights'));
@@ -118,9 +107,9 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 				// We don't need to upgrade the search indexer anymore since this is dealt with by a crontabbed
 				// task.
 
-				$this->flashMessenger->addMessage("Successfully created new technology {$newTechnology->name}.");
+				$this->_flashMessenger->addMessage("Successfully created new technology {$newTechnology->name}.");
 				
-				$this->redirector->gotoRoute(array('techid' => $newTechnology->id), 'technology');
+				$this->getHelper("Redirector")->gotoRoute(array('techid' => $newTechnology->id), 'technology');
 			}
 		}
 		
@@ -138,15 +127,15 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 		$revision = $technology->getOriginalRevision();
 		if (!$revision->isAuthor(Semtech_Model_User::getLoggedInUser()))
 		{
-			$this->flashMessenger->addMessage("Only the original creator can edit a technology's details.");
-			$this->redirector->gotoRoute(array('techid'=> $technology), 'technology');
+			$this->_flashMessenger->addMessage("Only the original creator can edit a technology's details.");
+			$this->getHelper("Redir")->gotoRoute(array('techid'=> $technology), 'technology');
 		}
 		
 		$form = new Semtech_Form_Technology_Edit($this->_getTechId());
 		
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
-			if ($form->isValid($this->request->getPost()))
+			if ($form->isValid($this->getRequest()->getPost()))
 			{
 				$technology->name = $form->getValue('name');
 				$technology->url = $form->getValue('url');
@@ -157,8 +146,8 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 				$technology->iprights = $form->getValue('iprights');
 				$technology->save();
 
-				$this->flashMessenger->addMessage("Successfully updated details for {$technology->name}.");
-				$this->redirector->gotoRoute(array('techid'=> $technology->id), 'technology');
+				$this->_flashMessenger->addMessage("Successfully updated details for {$technology->name}.");
+				$this->getHelper("Redirector")->gotoRoute(array('techid'=> $technology->id), 'technology');
 			}
 		}
 		else
@@ -180,11 +169,11 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 		
 		$techid = $this->_getTechId();
 			
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
-			$tagcatid = $this->request->getPost('tagcat');
+			$tagcatid = $this->getRequest()->getPost('tagcat');
 			$form = new Semtech_Form_Technology_Tags($tagcatid, $techid);
-			$form->populate($this->request->getPost());
+			$form->populate($this->getRequest()->getPost());
 			
 			// First try and obtain a revision for this user and this technology. If there isn't one
 			// then create a new one.
@@ -192,7 +181,7 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 			if (!$revision) 
 			{
 				$revision = Semtech_Model_Revision::newRevision(Semtech_Model_Technology::getTechnology($techid), Semtech_Model_User::getLoggedInUser());
-				$this->flashMessenger->addMessage("A new revision has been created for you. All tag edits you carry out will only apply to this revision.");
+				$this->_flashMessenger->addMessage("A new revision has been created for you. All tag edits you carry out will only apply to this revision.");
 			}
 					
 			$revision->updateTags($form->processForm(), $tagcatid);
@@ -202,12 +191,12 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 				$revision->setTechnologyUsage($form->usage);
 			}
 			
-			$this->flashMessenger->addMessage("Successfully updated tags for your revision of ".Semtech_Model_Technology::getTechnology($techid).".");
-			$this->redirector->gotoRoute(array("techid" => $techid, "revid" => $revision->id), 'technologyrev');
+			$this->_flashMessenger->addMessage("Successfully updated tags for your revision of ".Semtech_Model_Technology::getTechnology($techid).".");
+			$this->getHelper("Redirector")->gotoRoute(array("techid" => $techid, "revid" => $revision->id), 'technologyrev');
 		}
 		else
 		{
-			$tagcatid = $this->request->getParam('tagcat');
+			$tagcatid = $this->getRequest()->getParam('tagcat');
 			$form = new Semtech_Form_Technology_Tags($tagcatid, $techid);
 		}
 		
@@ -225,15 +214,15 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 		
 		$form = new Semtech_Form_Technology_Activity($techid, $revid);
 		
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
-			$form->populate($this->request->getPost());
+			$form->populate($this->getRequest()->getPost());
 			
 			$revision = Semtech_Model_Revision::getRevision($revid, $techid, Semtech_Model_User::getLoggedInUser()->id);
 			if (!$revision)
 			{
 				$revision = Semtech_Model_Revision::newRevision(Semtech_Model_Technology::getTechnology($techid), Semtech_Model_User::getLoggedInUser());
-				$this->flashMessenger->addMessage("A new revision has been created for you. All tag edits you carry out will only apply to this revision.");
+				$this->_flashMessenger->addMessage("A new revision has been created for you. All tag edits you carry out will only apply to this revision.");
 			}
 			
 			$tat = new Semtech_Model_DbTable_TechnologyAnnotation();
@@ -251,8 +240,8 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 				$annotation->save();
 			}
 			
-			$this->flashMessenger->addMessage("Updated Annotation/Content Creation Activity");
-			$this->redirector->gotoRoute(array("techid" => $techid, "revid" => $revision->id), 'technologyrev');
+			$this->_flashMessenger->addMessage("Updated Annotation/Content Creation Activity");
+			$this->getHelper("Redirector")->gotoRoute(array("techid" => $techid, "revid" => $revision->id), 'technologyrev');
 		}
 		
 		$this->view->title = "Annotation/Content Creation Activity";
@@ -261,22 +250,22 @@ class Semtech_TechnologyController extends Zend_Controller_Action
 	
 	private function _getTechId()
 	{
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
-			return $this->request->getPost("techid");
+			return $this->getRequest()->getPost("techid");
 		}
 		
-		return $this->request->getParam("techid");
+		return $this->getRequest()->getParam("techid");
 	}
 	
 	private function _getRevId()
 	{
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
-			return $this->request->getPost("revid");
+			return $this->getRequest()->getPost("revid");
 		}
 		
-		return $this->request->getParam("revid");
+		return $this->getRequest()->getParam("revid");
 	}
 	
 }

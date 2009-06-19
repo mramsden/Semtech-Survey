@@ -3,13 +3,6 @@ class Semtech_UserController extends Semtech_Controller_Action
 {
 	protected $_request, $_forms;
 
-	public function init()
-	{
-		//$this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-		//$this->view->messages = $this->flashMessenger->getMessages();
-		//$this->flashMessenger->clearMessages();
-	}
-
 	public function indexAction()
 	{
 		$this->view->title = "User Account Area";	

@@ -1,17 +1,11 @@
 <?php
-class Semtech_DiscussionController extends Zend_Controller_Action
+class Semtech_DiscussionController extends Semtech_Controller_Action
 {
-	
-	public function init()
-	{
-		$this->request = $this->getRequest();
-		$this->techid = $this->getTechId();
-	}
 	
 	public function viewAction()
 	{	
-		$this->view->technology = Semtech_Model_Technology::getTechnology($this->techid);
-		$this->view->comments = Semtech_Model_Comment::fetchComments($this->techid);
+		$this->view->technology = Semtech_Model_Technology::getTechnology($this->getTechId());
+		$this->view->comments = Semtech_Model_Comment::fetchComments($this->getTechId());
 		$this->view->title = "Technology Discussion: {$this->view->technology->name}";
 		if (Zend_Auth::getInstance()->hasIdentity())
 			$this->view->form = new Semtech_Form_Discussion_Add($this->techid, Zend_Auth::getInstance()->getStorage()->read());
@@ -58,11 +52,11 @@ class Semtech_DiscussionController extends Zend_Controller_Action
 	{
 		if ($this->request->isPost())
 		{
-			return $this->request->getPost('techid');
+			return $this->getRequest()->getPost('techid');
 		}
 		else
 		{
-			return $this->request->getParam('techid');
+			return $this->getRequest()->getParam('techid');
 		}
 	}
 	

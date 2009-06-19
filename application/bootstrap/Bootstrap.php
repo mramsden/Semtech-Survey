@@ -104,7 +104,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	{
 		$this->_logger->info('Bootstrap '.__METHOD__);
 		
-		Zend_Registry::getInstance()->searchindex = APPLICATION_PATH.'/../var/index';
+		Zend_Registry::getInstance()->searchindex = APPLICATION_PATH.'/../var/search';
 	}
 	
 	/**

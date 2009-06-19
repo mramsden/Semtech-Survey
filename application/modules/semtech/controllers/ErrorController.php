@@ -1,5 +1,5 @@
 <?php
-class Semtech_ErrorController extends Zend_Controller_Action
+class Semtech_ErrorController extends Semtech_Controller_Action
 {
 
 	public function errorAction()
@@ -22,7 +22,7 @@ class Semtech_ErrorController extends Zend_Controller_Action
 					else
 						$this->view->message = "You must <a href=\"/user/login\">login</a> to see this page.";	
 				} else if ($errors->exception instanceof Semtech_Exception_Ajax) {
-					$this->getResponse()->setRawHeader("HTTP/1.1 403 Forbidden");
+					$this->getResponse()->setRawHeader("HTTP/1.1 503 Service Unavilable");
 					$this->view->title = "Not Supported";
 					$this->view->message = "You cannot view this page.";
 				} else {
@@ -32,12 +32,12 @@ class Semtech_ErrorController extends Zend_Controller_Action
 				break;
 		}
 		
-		if ($this->_helper->environment() == Semtech_Controller_Helper_Environment::DEVELOPMENT_ENVIRONMENT)
+		if (APPLICATION_ENV == "development")
 		{
 			$this->view->error = $errors;
 		}
 		
-		error_log("A system error has occurred ({$this->_helper->environment()}): ".$errors->exception->getMessage());
+		Zend_Registry::get("log")->crit("A system error has occurred ({$this->_helper->environment()}): ".$errors->exception->getMessage());
 	}
 
 }

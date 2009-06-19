@@ -1,13 +1,15 @@
 <?php
-class Semtech_SearchController extends Semtech_Controller_Action_Parameters
+class Semtech_SearchController extends Semtech_Controller_Action
 {
 	public function init()
 	{
 		$this->request = $this->getRequest();
 	}
 
-	public function searchAction($searchTerm = null)
+	public function searchAction()
 	{
+	  $searchTerm = $this->getRequest()->getParam("searchTerm");
+	  
 		if ($searchTerm)
 		{
 			$registry = Zend_Registry::getInstance();
@@ -26,8 +28,10 @@ class Semtech_SearchController extends Semtech_Controller_Action_Parameters
 		$this->view->title = "Search Results";
 	}
 
-	public function tagAction($tag = null)
+	public function tagAction()
 	{
+	  $tag = $this->getRequest()->getParam("tag");
+	  
 		if ($tag)
 		{
 			$this->view->tag = urldecode($tag);
