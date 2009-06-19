@@ -6,7 +6,7 @@
         <?= $this->tagcategory->name; ?>
     </h3>
     <p class="tagcategorydescription"><?= $this->tagcategory->description; ?></p>
-    <?php if (isset($this->revision) && count($this->revision->getTags())): ?>
+    <?php if (isset($this->revision) && count($this->revision->getTags($this->tagcategory->name))): ?>
     <?php
     $tags = array(); 
     foreach ($this->revision->getTags($this->tagcategory->name) as $tag ) {
