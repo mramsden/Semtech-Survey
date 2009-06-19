@@ -13,7 +13,7 @@
 			<?= Semtech_Model_RelationDefinition::getRelationDefinition($relation->relation)->text; ?>
 		</td>
 		<td>
-			<a href="/technology/view/<?= Semtech_Model_Technology::getTechnology($relation->subject)->id; ?>">
+			<a href="/technology/<?= Semtech_Model_Technology::getTechnology($relation->subject)->id; ?>">
 				<?= Semtech_Model_Technology::getTechnology($relation->subject)->name; ?>
 			</a>
 		</td>
