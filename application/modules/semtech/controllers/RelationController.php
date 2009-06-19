@@ -35,9 +35,9 @@ class Semtech_RelationController extends Semtech_Controller_Action
 		
 		$form = new Semtech_Form_Relation_Relation($techid);
 		
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
-			if ($form->isValid($this->request->getPost()))
+			if ($form->isValid($this->getRequest()->getPost()))
 			{
 				Semtech_Model_Relation::newRelation($technology, Semtech_Model_Technology::getTechnology($form->getValue('relatedtechnology')), Semtech_Model_User::getLoggedInUser(), $form->getValue('relationtype'), $form->getValue('description'));
 				$this->_redirect("/technology/relations/{$technology->id}");
@@ -59,9 +59,9 @@ class Semtech_RelationController extends Semtech_Controller_Action
 		
 		$form = new Semtech_Form_Relation_Reference($techid);
 		
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
-			if ($form->isValid($this->request->getPost()))
+			if ($form->isValid($this->getRequest()->getPost()))
 			{
 				Semtech_Model_Reference::newReference($techid, Semtech_Model_User::getLoggedInUser(), $form->getValue('reference'), $form->getValue('url'));
 				$this->_redirect("/technology/relations/{$technology->id}");
@@ -74,12 +74,12 @@ class Semtech_RelationController extends Semtech_Controller_Action
 	
 	private function getTechId()
 	{
-		if ($this->request->isPost())
+		if ($this->getRequest()->isPost())
 		{
-			return $this->request->getPost("techid");
+			return $this->getRequest()->getPost("techid");
 		}
 		
-		return $this->request->getParam("techid");
+		return $this->getRequest()->getParam("techid");
 	}
 	
 }
