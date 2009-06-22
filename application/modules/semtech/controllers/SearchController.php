@@ -20,7 +20,7 @@ class Semtech_SearchController extends Semtech_Controller_Action
 			{
 				if (!isset($this->view->searchResults))
 					$this->view->searchResults = array();
-				$this->view->searchResults[] = Technology::getTechnology($hit->technologyid);
+				$this->view->searchResults[] = Semtech_Model_Technology::getTechnology($hit->technologyid);
 			}
 			$this->view->searchTerm = $searchTerm;	
 		}
