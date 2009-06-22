@@ -52,10 +52,11 @@ class Semtech_TechnologyController extends Semtech_Controller_Action
 		}
 		
 		$this->view->technology = $technology;
-		$this->view->revision = $technology->getDefaultRevision();
 		$revid = $this->getRequest()->getParam("revid", null);
 		if ($revid) {
 			$this->view->revision = Semtech_Model_Revision::getRevision($revid);
+		} else {
+		  $this->view->revision = $technology->getDefaultRevision();
 		}
 		
 		$this->view->tagsleft = array();

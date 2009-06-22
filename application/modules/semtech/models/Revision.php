@@ -176,6 +176,8 @@ class Semtech_Model_Revision extends Zend_Db_Table_Row
     $tagcategorytable = new Semtech_Model_DbTable_TagCategories();
     $tagcategory = $tagcategorytable->fetchRow($tagcategorytable->select()->where("id = ?", $tagcatid));
 
+    error_log("New Tags: ".$newTags);
+
     // First add all new tags.
     if (count($newTags))
     {
@@ -208,35 +210,35 @@ class Semtech_Model_Revision extends Zend_Db_Table_Row
     return $hastag;
   }
 
-  public function getTags($category)
+  public function getTags($category = null)
   {
-    if (!is_null($category) && !isset($this->_tags[$category]))
+    if (is_null($this->_tags) || (!isset($this->_tags[$category])))
     {
+      $this->_tags = array();
       $ttt = new Semtech_Model_DbTable_TechnologyTags();
       $select = $ttt->select()->where("revision = ?", $this->id)->where("technology = ?", $this->technology);
       $alltags = $ttt->fetchAll($select);
 
-      $tags = array();
       foreach ($alltags as $tag)
       {
         $tagtable = new Semtech_Model_DbTable_Tags();
         $select = $tagtable->select()->where("id = ?", $tag->tag);
         $tag = $tagtable->fetchRow($select);
-
-        if ($category)
-        {
-          if ($tag->category == $category)
-            $tags[] = $tag;
-          continue;
-        }
-
-        $tags[] = $tag;
+        
+        $this->_tags[$tag->category][] = $tag;
       }
-      
-      $this->_tags = $tags;
     }
-
-    return $this->_tags;
+    
+    if (!is_null($category))
+    {
+      $tags = isset($this->_tags[$category]) ? $this->_tags[$category] : array();
+    }
+    else
+    {
+      $tags = $this->_tags;
+    }
+    
+    return $tags;
   }
 
   /**
@@ -264,12 +266,12 @@ class Semtech_Model_Revision extends Zend_Db_Table_Row
     *
     * @param <Tag> $tag
     */
-  private function removeTag(Tag $tag)
+  private function removeTag(Semtech_Model_Tag $tag)
   {
     // Flush the tag cache.
     $this->_tags = null;
     
-    $technologytagstable = new Model_DbTable_TechnologyTags();
+    $technologytagstable = new Semtech_Model_DbTable_TechnologyTags();
     $technologytagstable->delete("tag = {$tag->id} ".Zend_Db_Select::SQL_AND." revision = {$this->id}");
   }
 

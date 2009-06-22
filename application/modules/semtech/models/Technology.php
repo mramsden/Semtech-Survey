@@ -212,10 +212,33 @@ class Semtech_Model_Technology extends Zend_Db_Table_Row {
 		return $revision;
 	}
 
+  /**
+   * This function returns the default revision. The default revision is either
+   * the revision created by the user who created the original revision or the
+   * first revision from the list of the next revisions.
+   *
+   * @return Semtech_Model_Revision
+   * @author Marcus Ramsden
+   */
 	public function getDefaultRevision()
 	{
 		$originalrevision = $this->getOriginalRevision();
-		return $originalrevision;
+		$originalcreator = $originalrevision->getAuthor();
+		
+		$revision = null;
+		
+		if ($originalcreator instanceof Semtech_Model_User)
+		{
+		  $revision = Semtech_Model_Revision::getRevision(null, $this->id, $originalcreator->id);
+		}
+		else if (is_string($originalcreator))
+		{
+		  $revisionstable = new Semtech_Model_DbTable_Revisions();
+		  $select = $revisionstable->select()->where("original = 0")->limit(1);
+		  $revsion = $revisionstable->fetchRow($select);
+		}
+		
+		return $revision;
 	}
 
 	public function getReferences()
