@@ -265,6 +265,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 			)
 		);
 		$router->addRoute('technologyactivity', $route);
+	
+	  $route = new Zend_Controller_Router_Route(
+	    'search/tag/:tagid',
+	    array(
+	      'action' => 'tag',
+	      'controller' => 'search'
+	    ),
+	    array(
+	      'tagid' => '[0-9]+'
+	    )
+	  );
+	  $router->addRoute('tagsearch', $route);
 	}
 	
 	protected function _initActionHelpers()

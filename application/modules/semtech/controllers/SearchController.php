@@ -30,22 +30,22 @@ class Semtech_SearchController extends Semtech_Controller_Action
 
 	public function tagAction()
 	{
-	  $tag = $this->getRequest()->getParam("tag");
+	  $tag = $this->getRequest()->getParam("tagid");
 	  
 		if ($tag)
 		{
 			$this->view->tag = urldecode($tag);
-			$tagtable = new Model_DbTable_Tags();
+			$tagtable = new Semtech_Model_DbTable_Tags();
 			$tag = $tagtable->fetchRow($tagtable->select()->where("id = ?", $tag));
-			$technologytagstable = new Model_DbTable_TechnologyTags();
+			$technologytagstable = new Semtech_Model_DbTable_TechnologyTags();
 			$technologytags = $technologytagstable->fetchAll($technologytagstable->select()->where("tag = ?", $tag->id));
 			$technologies = array();
 			foreach ($technologytags as $technologytag)
 			{
-				if (!Model_Revision::getRevision($technologytag->revision)->isOriginal())
+				if (!Semtech_Model_Revision::getRevision($technologytag->revision)->isOriginal())
 				{
 					if (!isset($technologies[$technologytag->technology])) {
-						$technologies[$technologytag->technology]['technology'] = Model_Technology::getTechnology($technologytag->technology); 
+						$technologies[$technologytag->technology]['technology'] = Semtech_Model_Technology::getTechnology($technologytag->technology); 
 						$technologies[$technologytag->technology]['count'] = 1;
 					} else {
 						$technologies[$technologytag->technology]['count']++;

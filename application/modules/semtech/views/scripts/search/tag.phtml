@@ -1,6 +1,6 @@
 <?php if (isset($this->tag)): ?>
 <?php if (isset($this->technologies)): ?>
-<p>The following technologies have been tagged with <?= Model_Tag::getTag($this->tag); ?>;</p>
+<p>The following technologies have been tagged with <?= Semtech_Model_Tag::getTag($this->tag); ?>;</p>
 <table>
 	<tr><th>Name</th><th>Number of times tagged</th></tr>
 <?php foreach ($this->technologies as $techid => $technology): ?>
