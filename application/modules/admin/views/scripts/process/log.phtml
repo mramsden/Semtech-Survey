@@ -1,0 +1,6 @@
+<p><form method="get">View the last <input name="lines" type="text" size="3" value="<?php echo $this->lines; ?>"/> lines. <input type="submit" value="Go"/></form></p>
+<pre>
+<?php foreach ($this->log as $line): ?>
+  <?php print $line; ?>  
+<?php endforeach; ?>
+</pre>

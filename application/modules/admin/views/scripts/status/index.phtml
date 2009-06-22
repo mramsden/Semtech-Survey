@@ -12,6 +12,16 @@
     <tr><td style="font-weight: bold;">User Time (s)</td><td><?php echo $dat["ru_utime.tv_sec"]; ?></td></tr>
     <?php endif; ?>
   </table>
+  <h2>Search Module</h2>
+  <p>
+    Indexer Status:&nbsp;
+  <?php if (file_exists(APPLICATION_PATH."/../var/processes/indexer")): ?>
+    <span style="color: green;">Running</span>&nbsp;<a href="/admin/process/stop/ps/indexer">Stop Indexer</a>
+  <?php else: ?>
+    <span style="color: red;">Stopped</span>&nbsp;<a href="/admin/process/start/ps/indexer">Start Indexer</a>
+  <?php endif; ?>
+    &nbsp;<a href="/admin/process/log/ps/indexer">Read Log</a>
+  </p>
   <h2>Twitter Module</h2>
   <table>
     <tr><th>Remaining API calls this hour</th><td><?php echo $this->remainingTwitterApiCalls; ?></td></tr>

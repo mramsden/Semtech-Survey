@@ -16,6 +16,7 @@ $application->bootstrap();
 
 $log = Zend_Registry::get("log");
 
+error_log("Marking execution");
 touch(APPLICATION_PATH."/../var/processes/indexer");
 
 $log->info("Semtech Survey Indexer started");
