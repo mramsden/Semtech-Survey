@@ -5,17 +5,13 @@ class Admin_ProcessController extends Semtech_Controller_Admin_Action
   public function startAction()
   {
     $ps = $this->getRequest()->getParam("ps");
-    error_log("Attempting to start $ps");
     if ($this->_ps_valid($ps))
     {
-      error_log("$ps is valid");
       // Attempt to start the process.
       exec(APPLICATION_PATH."/../scripts/indexer > /dev/null &");
       
-      error_log("Command run");
-      
       // Wait 20 seconds to see if the process starts.
-      $timeout = time() + 10;
+      $timeout = time() + 20;
       $started = false;
       
       while (!$started && (time() < $timeout))
@@ -23,7 +19,6 @@ class Admin_ProcessController extends Semtech_Controller_Admin_Action
         if (file_exists(APPLICATION_PATH."/../var/processes/$ps"))
         {
           $started = true;
-          error_log("$ps started successfully");
         }
       }
       
@@ -46,7 +41,39 @@ class Admin_ProcessController extends Semtech_Controller_Admin_Action
   
   public function stopAction()
   {
+    $ps = $this->getRequest()->getParam("ps");
     
+    if ($this->_ps_valid($ps))
+    {
+      
+      unlink(APPLICATION_PATH."/../var/processes/$ps");
+      
+      $timeout = time() + 20;
+      $stopped = false;
+      
+      while (!$stopped && (time() < $timeout))
+      {
+        if (!file_exists(APPLICATION_PATH."/../var/processes/$ps"))
+        {
+          $stopped = true;
+        }
+      }
+      
+      if ($stopped)
+      {
+        $this->_flashMessenger->addMessage("'$ps' has been stopped.");
+      }
+      else
+      {
+        $this->_flashMessenger->addMessage("'$ps' failed to stop.");
+      }
+    }
+    else
+    {
+      $this->_flashMessenger->addMessage("'$ps' is not a valid process.");
+    }
+    
+    $this->getHelper("Redirector")->gotoUrl($_SERVER['HTTP_REFERER']);
   }
   
   public function logAction()
