@@ -230,6 +230,15 @@ class Semtech_Model_Technology extends Zend_Db_Table_Row {
 		if ($originalcreator instanceof Semtech_Model_User)
 		{
 		  $revision = Semtech_Model_Revision::getRevision(null, $this->id, $originalcreator->id);
+		  if (is_null($revision))
+		  {
+		    // If the revision is still null then this means that either
+		    // it never existed or the original creator's revision has been deleted.
+		    // Return the first revision for this technology that is not an original entry.
+		    $trt = new Semtech_Model_DbTable_TechnologyRevisions();
+		    $select = $trt->select()->where("original = 0")->where("technology = ?", $this->id)->limit(1);
+		    $revision = $trt->fetchRow($select);
+		  }
 		}
 		else if (is_string($originalcreator))
 		{

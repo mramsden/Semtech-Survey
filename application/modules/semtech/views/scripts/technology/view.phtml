@@ -29,9 +29,13 @@
             <a href="<?= $this->url(array("techid" => $this->technology->id), 'technologyrelations'); ?>">References &amp; Related Technologies</a>
         </p>
     </div>
-	<?php if (count($this->revisions)): ?>
+	<?php if (count($this->revisions) > 1): ?>
 	<div class="revisionselector">
-		Select Tag Revision: <?= $this->formSelect("revisionselector", $this->revision->id, array('onchange' => "javascript: window.location = '/technology/{$this->technology->id}/'+document.getElementById('revisionselector').value;"), $this->revisions); ?>
+		Select Tag Revision: <?php echo $this->formSelect("revisionselector", $this->revision instanceof Semtech_Model_Revision ? $this->revision->id : null, array('onchange' => "javascript: window.location = '/technology/{$this->technology->id}/'+document.getElementById('revisionselector').value;"), $this->revisions); ?>
+	</div>
+	<?php elseif (count($this->revisions) == 1): ?>
+	<div class="revisionselector">
+	  Currently Viewing Revision: <?php echo $this->revision->getTechnology()->name." (".$this->revision->getAuthor()->name.")"; ?>
 	</div>
 	<?php endif; ?>
 	<?php if (!is_null(Semtech_Model_User::getLoggedInUser()) && Semtech_Model_User::getLoggedInUser()->isAdmin()): ?>
