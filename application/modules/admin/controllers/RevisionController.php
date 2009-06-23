@@ -25,7 +25,7 @@ class Admin_RevisionController extends Semtech_Controller_Admin_Action
     $revisionid = $this->getRequest()->getParam("revid");
     if (!is_null($revisionid))
     {
-      $revision = Semtech_Model_Revision::getRevision($revisionid);
+      $revision = Admin_Model_Revision::getRevision($revisionid);
       if (!is_null($revision))
       {
         if ($this->getRequest()->isPost())
