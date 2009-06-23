@@ -36,7 +36,7 @@
 	<?php endif; ?>
 	<?php if (!is_null(Semtech_Model_User::getLoggedInUser()) && Semtech_Model_User::getLoggedInUser()->isAdmin()): ?>
 	<div class="adminfunctions">
-		<p><a href="/admin/technology/delete/techid/<?php echo $this->technology->id?>">Delete Technology</a> | Delete Revision</p>
+		<p><a href="/admin/technology/delete/techid/<?php echo $this->technology->id?>">Delete Technology</a> | <a href="/admin/revision/delete/revid/<?php echo $this->revision->id; ?>">Delete Revision</a></p>
 	</div>
 	<?php endif; ?>
     <div class="technologytags">

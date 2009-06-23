@@ -1,0 +1,15 @@
+<form method="post">
+	<input type="hidden" name="revid" value="<?php echo $this->revision->id; ?>"/>
+	<fieldset>
+		<legend>Confirm Action</legend>
+		<p>
+			Are you sure you want to delete this revision for <?php echo $this->revision->getTechnology()->name; ?>?<br/>
+			<span style="font-weight: bold;">Once confirmed this action cannot be undone.</span>
+		</p>
+		<p>
+			<input type="submit" name="confirmation" value="Cancel Action"/>
+			&nbsp;
+			<input type="submit" name="confirmation" value="Confirm Action"/>
+		</p>
+	</fieldset>
+</form>
