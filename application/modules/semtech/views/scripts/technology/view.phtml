@@ -29,35 +29,40 @@
             <a href="<?= $this->url(array("techid" => $this->technology->id), 'technologyrelations'); ?>">References &amp; Related Technologies</a>
         </p>
     </div>
+  <div class="revisionselector">
 	<?php if (count($this->revisions) > 1): ?>
-	<div class="revisionselector">
 		Select Tag Revision: <?php echo $this->formSelect("revisionselector", $this->revision instanceof Semtech_Model_Revision ? $this->revision->id : null, array('onchange' => "javascript: window.location = '/technology/{$this->technology->id}/'+document.getElementById('revisionselector').value;"), $this->revisions); ?>
-	</div>
 	<?php elseif (count($this->revisions) == 1): ?>
-	<div class="revisionselector">
 	  Currently Viewing Revision: <?php echo $this->revision->getTechnology()->name." (".$this->revision->getAuthor()->name.")"; ?>
-	</div>
+	<?php else: ?>
+	  There are currently no tag revisions.
 	<?php endif; ?>
+	</div>
 	<?php if (!is_null(Semtech_Model_User::getLoggedInUser()) && Semtech_Model_User::getLoggedInUser()->isAdmin()): ?>
 	<div class="adminfunctions">
-		<p><a href="/admin/technology/delete/techid/<?php echo $this->technology->id?>">Delete Technology</a> | <a href="/admin/revision/delete/revid/<?php echo $this->revision->id; ?>">Delete Revision</a></p>
+		<p>
+		  <a href="/admin/technology/delete/techid/<?php echo $this->technology->id?>">Delete Technology</a>
+		  <?php if (count($this->revisions) > 0): ?>
+		    &nbsp;|&nbsp;<a href="/admin/revision/delete/revid/<?php echo $this->revision->id; ?>">Delete Revision</a>
+		  <?php endif; ?>
+		</p>
 	</div>
 	<?php endif; ?>
     <div class="technologytags">
         <div class="tagsrightcolumn">
             <div class="techtags">
-                <h4><?= $this->tagsrighttitle; ?></h4>
+                <h4><?php echo $this->tagsrighttitle; ?></h4>
             </div>
             <?php foreach ($this->tagsright as $tagcategory): ?>
-            <?= $this->partial("partials/tagdisplay.phtml", array('tagcategory' => $tagcategory, 'technology' => $this->technology, 'revision' => $this->revision)); ?>
+            <?php echo $this->partial("partials/tagdisplay.phtml", array('tagcategory' => $tagcategory, 'technology' => $this->technology, 'revision' => $this->revision)); ?>
             <?php endforeach; ?>
         </div>
         <div class="tagsleftcolumn">
             <div class="techtags">
-                <h4><?= $this->tagslefttitle; ?></h4>
+                <h4><?php echo $this->tagslefttitle; ?></h4>
             </div>
             <?php foreach ($this->tagsleft as $tagcategory): ?>
-            <?= $this->partial("partials/tagdisplay.phtml", array('tagcategory' => $tagcategory, 'technology' => $this->technology, 'revision' => $this->revision)); ?>
+            <?php echo $this->partial("partials/tagdisplay.phtml", array('tagcategory' => $tagcategory, 'technology' => $this->technology, 'revision' => $this->revision)); ?>
             <?php endforeach; ?>
         </div>
     </div>
