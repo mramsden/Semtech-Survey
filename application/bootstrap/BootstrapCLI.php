@@ -37,7 +37,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	{
 		$logger = new Zend_Log();
 		
-		$writer = new Zend_Log_Writer_Stream(APPLICATION_PATH.'/../var/logs/indexer.log');
+		$writer = new Zend_Log_Writer_Stream(APPLICATION_PATH.'/../var/logs/cli.log');
 		//$writer = new Zend_Log_Writer_Stream('php://stdout');
 		$logger->addWriter($writer);
 		

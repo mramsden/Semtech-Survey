@@ -1,27 +1,66 @@
 #!/usr/bin/env php
 <?php
-define('APP_ROOT', realpath(dirname(dirname(__FILE__))));
+defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', 'development');
+set_include_path(implode(PATH_SEPARATOR, array(
+  get_include_path(),
+  realpath(APPLICATION_PATH."/../library")
+)));
 
-set_include_path(APP_ROOT."/library".PATH_SEPARATOR.APP_ROOT."/application/models".PATH_SEPARATOR.get_include_path());
-require 'Zend/Loader.php';
-Zend_Loader::registerAutoload();
+require_once("Zend/Application.php");
+$application = new Zend_Application(
+  APPLICATION_ENV,
+  APPLICATION_PATH.'/config/cliapplication.ini'
+);
+$application->bootstrap();
 
-$config = new Zend_Config_Xml(APP_ROOT.'/application/config/database.xml', 'development');
-Zend_Db_Table::setDefaultAdapter(Zend_Db::factory($config->database));
+$log = Zend_Registry::get("log");
+$log->addWriter(new Zend_Log_Writer_Stream(APPLICATION_PATH.'/../var/logs/announcer.log'));
 
-$technologytable = new TechnologyTable();
-$technologies = $technologytable->fetchAll();
-$twitter = new Semtech_Twitter();
-foreach ($technologies as $technology)
+touch(APPLICATION_PATH."/../var/processes/announcer");
+
+$log->info("Semtech Survey Indexer started");
+
+$log->info("Attempting to load announcer.ini...");
+try
 {
-	if ($technology->isAnnounced())
-	{
-	  continue;
-	}
-	
-	$twitter->announceTechnology($technology);
-	print "{$technology->name} has been announced.\n";
-	sleep(10);
+  $settings = new Zend_Config_Ini(APPLICATION_PATH."/config/announcer.ini");
 }
-print "Script complete!\n";
-?>
+catch (Zend_Config_Exception $e)
+{
+  $log->info("Unable to find ".APPLICATION_PATH."/config/announcer.ini, assuming defaults.");
+  $settings["interval"] = 3600;
+}
+
+$running = true;
+
+while ($running)
+{
+  
+  if (!isset($nextannounce) || $nextannounce > time())
+  {
+    $technologytable = new Semtech_Model_DbTable_Technologies();
+    $technologies = $technologytable->fetchAll();
+    $twitter = new Semtech_Twitter();
+    foreach ($technologes as $technology)
+    {
+      if (!$technology->isAnnounced())
+      {
+        $twitter->announceTechnology($technology);
+      	$log->info("{$technology->name} has been announced.");
+      	sleep(5);
+      }
+    }
+    
+    $nextannounce = time() + $settings["interval"];
+  }
+  
+  if (!file_exists(APPLICATION_PATH."/../var/processes/announcer"))
+  {
+    $log->info("The process handle has been deleted shutting down announcer.");
+    $running = false;
+  }
+  
+}
+
+exit(0);
