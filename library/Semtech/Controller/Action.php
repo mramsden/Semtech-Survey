@@ -25,6 +25,13 @@ class Semtech_Controller_Action extends Zend_Controller_Action
     $this->registerCallback("getFlashMessages");
   }
   
+  public function postDispatch()
+  {
+    parent::postDispatch();
+    
+    $this->view->headTitle($this->view->title);
+  }
+  
   public function dispatch($action)
   {
     $this->_helper->notifyPreDispatch();

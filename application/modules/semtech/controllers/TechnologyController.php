@@ -75,6 +75,8 @@ class Semtech_TechnologyController extends Semtech_Controller_Action
 			$this->view->tagslefttitle = Semtech_Model_TagCategory::SUPERCATEGORY_EDUCATIONAL_CONTEXT;
 		if (count($this->view->tagsright))
 			$this->view->tagsrighttitle = Semtech_Model_TagCategory::SUPERCATEGORY_SEMANTIC_TECHNOLOGIES;
+			
+		$this->view->title = "Viewing ".$technology->name;
 	}
 	
 	public function newAction()
