@@ -4,7 +4,7 @@
 		<legend>Confirm Action</legend>
 		<p>
 			Are you sure you want to delete <?php echo $this->technology->name; ?>? 
-			It has <?php echo $this->technology->getRevisions()->count(); ?> revisions
+			It has <?php echo $this->technology->getRevisions()->count() - 1; ?> revisions
 			attached.<br/>
 			<span style="font-weight: bold;">Once confirmed this action cannot be undone.</span>
 		</p>
