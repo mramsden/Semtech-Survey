@@ -27,8 +27,8 @@ class Semtech_IndexController extends Semtech_Controller_Action
 			$tagcloud->addElement(new Semtech_Tagcloud_Element($tag['name'], $tag['weight'], "/search/tag/$tagid"));
 		}
 		
-		$twitter = new Semtech_Twitter();
-		$this->view->tweets = $twitter->getStatusMessages();
+		//$twitter = new Semtech_Twitter();
+		//$this->view->tweets = $twitter->getStatusMessages();
 		$this->view->tagcloud = $tagcloud;
 	}
 	

@@ -27,6 +27,7 @@ ul.tagcloud .count {
 "); ?>
 <h1>Welcome to the SemTech Survey</h1>
 <div style="float: right; width: 400px; border: 1px solid #F6F6F6; text-align: right; padding: 5px;">
+  <?php if (isset($this->tweets)): ?>
 	<h2>SemTech Twitter Feed <img src="/images/twitter_boxed_48.png" align="middle" border="0"/><br/><a href="http://twitter.com/semtech" title="Click here to follow us!"><span style="font-size: small;">Follow Us</span></a></h2>
 	<div id="twitter_feed">
 	<?php foreach ($this->tweets as $tweet): ?>
@@ -36,6 +37,7 @@ ul.tagcloud .count {
 	  </div>
 	<?php endforeach; ?>
 	</div>
+	<?php endif; ?>
 	<h2>Common Tags</h2>
 	<span style="font-size: 10px;"><?= $this->tagcloud; ?></span>
 </div>
