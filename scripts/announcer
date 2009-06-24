@@ -19,7 +19,7 @@ $log->addWriter(new Zend_Log_Writer_Stream(APPLICATION_PATH.'/../var/logs/announ
 
 touch(APPLICATION_PATH."/../var/processes/announcer");
 
-$log->info("Semtech Survey Indexer started");
+$log->info("Semtech Survey Twitter announcer started");
 
 $log->info("Attempting to load announcer.ini...");
 try

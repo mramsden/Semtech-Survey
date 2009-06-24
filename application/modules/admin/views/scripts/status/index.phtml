@@ -13,7 +13,7 @@
     <tr><td style="font-weight: bold;">User Time (s)</td><td><?php echo $dat["ru_utime.tv_sec"]; ?></td></tr>
     <?php endif; ?>
   </table>
-  <h2>Search Module</h2>
+  <h2>Process Module</h2>
   <p>
     Indexer Status:&nbsp;
   <?php if (file_exists(APPLICATION_PATH."/../var/processes/indexer")): ?>
@@ -22,6 +22,15 @@
     <span style="color: red;">Stopped</span>&nbsp;<a href="/admin/process/start/ps/indexer">Start Indexer</a>
   <?php endif; ?>
     &nbsp;<a href="/admin/process/log/ps/indexer">Read Log</a>
+  </p>
+  <p>
+    Announcer Status:&nbsp;
+  <?php if (file_exists(APPLICATION_PATH."/../var/processes/announcer")): ?>
+    <span style="color: green;">Running</span>&nbsp;<a href="/admin/process/stop/ps/announcer">Stop Announcer</a>
+  <?php else: ?>
+    <span style="color: red;">Stopped</span>&nbsp;<a href="/admin/process/start/ps/announcer">Start Announcer</a>
+  <?php endif; ?>
+    &nbsp;<a href="/admin/process/log/ps/announcer">Read Log</a>  
   </p>
   <h2>Twitter Module</h2>
   <table>

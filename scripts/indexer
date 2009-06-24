@@ -15,7 +15,7 @@ $application = new Zend_Application(
 $application->bootstrap();
 
 $log = Zend_Registry::get("log");
-$log->addWriter(new Zend_Log_Writer_Stream(APPLICATION_PATH.'/../var/logs/announcer.log'));
+$log->addWriter(new Zend_Log_Writer_Stream(APPLICATION_PATH.'/../var/logs/indexer.log'));
 
 touch(APPLICATION_PATH."/../var/processes/indexer");
 

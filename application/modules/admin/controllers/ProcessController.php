@@ -8,7 +8,7 @@ class Admin_ProcessController extends Semtech_Controller_Admin_Action
     if ($this->_ps_valid($ps))
     {
       // Attempt to start the process.
-      exec(APPLICATION_PATH."/../scripts/indexer > /dev/null &");
+      exec(APPLICATION_PATH."/../scripts/$ps > /dev/null &");
       
       // Wait 20 seconds to see if the process starts.
       $timeout = time() + 20;
