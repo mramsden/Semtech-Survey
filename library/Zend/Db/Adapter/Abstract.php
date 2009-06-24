@@ -17,7 +17,7 @@
  * @subpackage Adapter
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 15664 2009-05-21 12:59:47Z yoshida@zend.co.jp $
+ * @version    $Id: Abstract.php 16029 2009-06-12 18:01:37Z doctorrock83 $
  */
 
 
@@ -1064,7 +1064,7 @@ abstract class Zend_Db_Adapter_Abstract
      * can invoke it.
      *
      * @param string $key
-     * @returns string
+     * @return string
      */
     public function foldCase($key)
     {

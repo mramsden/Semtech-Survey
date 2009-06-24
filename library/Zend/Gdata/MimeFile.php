@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zend Framework
  *
@@ -13,45 +14,52 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_Amf
- * @subpackage Value
+ * @package    Zend_Gdata
+ * @subpackage Gdata
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
 /**
- * Wrapper class to store an AMF3 flash.utils.ByteArray
+ * A wrapper for strings for buffered reading.
  *
- * @package    Zend_Amf
- * @subpackage Value
+ * @category   Zend
+ * @package    Zend_Gdata_MimeFile
+ * @subpackage Gdata
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Amf_Value_ByteArray 
+class Zend_Gdata_MimeFile
 {
-    /**
-     * @var string ByteString Data
-     */
-    protected $_data = '';
 
     /**
-     * Create a ByteArray
+     * A handle to the file that is part of the message.
      *
-     * @param  string $data
-     * @return void
+     * @var resource
      */
-    public function __construct($data)
+    protected $_fileHandle = null;
+
+    /**
+     * Create a new MimeFile object.
+     *
+     * @param string $fileHandle An open file handle to the file being
+     *               read.
+     */
+    public function __construct($fileHandle)
     {
-        $this->_data = $data;
+        $this->_fileHandle = $fileHandle;
     }
 
     /**
-     * Return the byte stream
+     * Read the next chunk of the file.
      *
-     * @return string
+     * @param integer $bytesRequested The size of the chunk that is to be read.
+     * @return string A corresponding piece of the message. This could be
+     *                binary or regular text.
      */
-    public function getData()
+    public function read($bytesRequested)
     {
-        return $this->_data;
+      return fread($this->_fileHandle, $bytesRequested);
     }
+
 }
