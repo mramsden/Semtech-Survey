@@ -5,7 +5,7 @@
 	<?php foreach ($this->paginator as $technology): ?>
 	<tr>
 		<td>
-			<?php echo $technology->name ? $technology->name : "Unspecified"; ?>
+			<a href="<?php echo $this->url(array('techid' => $technology->id), 'technology'); ?>"><?php echo $technology->name ? $technology->name : "Unspecified"; ?></a>
 		</td>
 		<td>
 			<?php echo $technology->url; ?>
