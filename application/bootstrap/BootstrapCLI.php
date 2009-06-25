@@ -26,6 +26,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	protected $_moduleLoader;
 	
 	/**
+	 * @var Zend_Config_Ini
+	 */
+	private $_configuration;
+	
+	/**
 	 * @var Zend_Controller_Front
 	 */
 	public $frontController;
@@ -48,6 +53,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		
 		$this->_logger = $logger;
 		Zend_Registry::set('log', $logger);
+	}
+	
+	protected function _initConfig()
+	{
+	  $config = new Zend_Config_Ini(APPLICATION_PATH."/config/application.ini", APPLICATION_ENV);
+	  $this->_configuration = $config;
 	}
 	
 	/**
@@ -75,6 +86,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	protected function _initSearchEngine()
 	{
 		Zend_Registry::getInstance()->searchindex = APPLICATION_PATH.'/../var/search';
+	}
+	
+	public function getConfiguration()
+	{
+	  return $this->_configuration;
 	}
 
 }

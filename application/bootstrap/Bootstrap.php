@@ -26,6 +26,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	protected $_moduleLoader;
 	
 	/**
+	 * @var Zend_Config_Ini
+	 */
+	protected $_configuration;
+	
+	/**
 	 * @var Zend_Controller_Front
 	 */
 	public $frontController;
@@ -63,6 +68,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->frontController->setRequest(new Zend_Controller_Request_Http());
 		$this->frontController->addControllerDirectory(APPLICATION_PATH.'/modules/admin/controllers', 'admin');
 		//$this->frontController->addModuleDirectory(APPLICATION_PATH.'/modules/admin');		
+	}
+	
+	protected function _initConfig()
+	{
+	  $config = new Zend_Config_Ini(APPLICATION_PATH."/config/application.ini", APPLICATION_ENV);
+	  $this->_configuration = $config;
 	}
 	
 	/**
@@ -284,6 +295,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->_logger->info('Bootstrap '.__METHOD__);
 		Zend_Controller_Action_HelperBroker::addHelper(new Semtech_Controller_Helper_Environment());
 		Zend_Controller_Action_HelperBroker::addHelper(new Semtech_Controller_Helper_ReturnToTarget());
+	}
+	
+	protected function _initTwitterService()
+	{
+	  $this->_logger->info("Bootstrap ".__METHOD__);
+	  $twitter = new Semtech_Twitter($this->_configuration->service->twitter->username, $this->_configuration->service->twitter->password);
+	  Zend_Registry::set("twitter", $twitter);
 	}
 
 }

@@ -11,7 +11,7 @@ class Admin_StatusController extends Semtech_Controller_Admin_Action
 	public function indexAction()
 	{
 	  $this->view->title = "System Status";
-	  $twitter = new Semtech_Twitter();
+	  $twitter = Zend_Registry::get("twitter");
 	  $this->view->remainingTwitterApiCalls = $twitter->getRemainingApiCalls();
 	}
 	

@@ -12,9 +12,6 @@ require_once "Semtech/Bitly.php";
  */
 class Semtech_Twitter
 {
-
-	const USERNAME = "semtech";
-	const PASS = "semtpass";
 	
 	/**
 	 * @var Zend_Service_Twitter
@@ -24,34 +21,110 @@ class Semtech_Twitter
 	/**
 	 * @var int
 	 */
-	private $_requestsLeft = 0;
+	private $_requestsLeft;
+
+  /**
+   * The username for the Twitter account.
+   *
+   * @var string
+   */
+  private $_username;
+  
+  /**
+   * The password for the Twitter account.
+   *
+   * @var string
+   */
+  private $_password;
 	
-	public function __construct($username = null, $pass = null)
+	/**
+	 * The constructor takes the supplied username and password
+	 * for the Twitter service.
+	 *
+	 * @param string $username 
+	 * @param string $password 
+	 * @author Marcus Ramsden
+	 */
+	public function __construct($username, $password)
 	{
-	  if (!is_null($username) && !is_null($pass))
-	  {
-	    $this->_twitter = new Zend_Service_Twitter($username, $pass);
-	  }
-	  else
-	  {
-      $this->_twitter = new Zend_Service_Twitter(self::USERNAME, self::PASS);
-	  }
 	  
-		if ($this->_twitter->accountVerifyCredentials()->isSuccess())
-		{
-			$remaininghits = "remaining-hits";
-			$this->_requestsLeft = $this->_twitter->accountRateLimitStatus()->$remaininghits();
-		}
-		else
-		{
-			throw new Zend_Exception("Twitter username and password incorrect.");
-		}
+	  $this->setUsername($username);
+	  $this->setPassword($password);
 		
 	}
 	
 	public function __destruct()
 	{
-		$this->_twitter->accountEndSession();
+		$this->_logout();
+	}
+	
+	/**
+	 * Returns what the username for Twitter is currently set to.
+	 *
+	 * @return string
+	 * @author Marcus Ramsden
+	 */
+	public function getUsername()
+	{
+	  return $this->_username;
+	}
+	
+	/**
+	 * Sets what the username for Twitter is. If the class had a validated
+	 * session with some old credentials it is ended.
+	 *
+	 * @param string $username 
+	 * @return void
+	 * @author Marcus Ramsden
+	 */
+	public function setUsername($username)
+	{
+	  $this->_username = $username;
+	  
+	  if ($this->loggedIn())
+	  {
+	    $this->_logout();
+	  }
+	}
+	
+	/**
+	 * Returns what the password for Twitter is currently set to.
+	 *
+	 * @return string
+	 * @author Marcus Ramsden
+	 */
+	public function getPassword()
+	{
+	  return $this->_password;
+	}
+	
+	/**
+	 * Sets what the password for Twitter is. If the class had a validated
+	 * session with some old credentials it is ended.
+	 *
+	 * @param string $password 
+	 * @return void
+	 * @author Marcus Ramsden
+	 */
+	public function setPassword($password)
+	{
+	  $this->_password = $password;
+	  
+	  if ($this->loggedIn())
+	  {
+	    $this->_logout();
+	  }
+	}
+	
+	/**
+	 * Indicates whether the instance of the service is logged in or not.
+	 *
+	 * @return void
+	 * @author Marcus Ramsden
+	 */
+	public function loggedIn()
+	{
+	  return !is_null($this->_twitter);
 	}
 	
 	/**
@@ -63,6 +136,11 @@ class Semtech_Twitter
 	 */
 	public function getRemainingApiCalls()
 	{
+	  if (!$this->loggedIn())
+	  {
+	    $this->_login();
+	  }
+	  
 	  return $this->_requestsLeft;
 	}
 	
@@ -110,16 +188,29 @@ class Semtech_Twitter
 	  if ($cache_time == 0 || !$tweets || sizeof($tweets) < $count)
 	  {
 	    Zend_Registry::get("log")->info("Cache Miss: Querying Twitter for tweets...");
-  	  $twitter_response = $this->_twitter->statusUserTimeline(array('count' => $count));
-  	  $tweets = array();
-  	  if ($twitter_response->isSuccess())
+  	  if (!$this->loggedIn())
   	  {
-  	    foreach ($twitter_response->statuses as $status)
-  	    {
-  	      $tweets[] = array("user" => (string)$status->user->name, "message" => $this->_parseLinks((string)$status->text));
-  	    }
+  	    $this->_login();
   	  }
-  	  $cache->save($tweets, 'twitter_tweets');
+  	  
+  	  if ($this->loggedIn())
+  	  {
+  	    $twitter_response = $this->_twitter->statusUserTimeline(array('count' => $count));
+    	  $tweets = array();
+    	  if ($twitter_response->isSuccess())
+    	  {
+    	    foreach ($twitter_response->statuses as $status)
+    	    {
+    	      $tweets[] = array("user" => (string)$status->user->name, "message" => $this->_parseLinks((string)$status->text));
+    	    }
+    	  }
+    	  $cache->save($tweets, 'twitter_tweets');
+    	  $this->_requestsLeft = $this->_requestLeft - 1;
+  	  }
+  	  else
+  	  {
+  	    throw new Zend_Exception("Unable to get user timeline as login failed.");
+  	  }
 	  }
 	  
 	  return $tweets;
@@ -146,14 +237,26 @@ class Semtech_Twitter
 	 */
 	public function _sendMessage($msg)
 	{
+	  if (!$this->loggedIn())
+	  {
+	    $this->_login();
+	  }
+	  
 		if ($this->_requestsLeft == 0)
 		{
 		  Zend_Log::get("log")->crit(__CLASS__.": No more API calls can be made this hour.");
       throw new Zend_Exception("Number of requests exceeded for this hour.");
 		}
-			
-		$this->_twitter->statusUpdate($msg);
-		$this->_requestsLeft = $this->_requestsLeft - 1;
+		
+		if ($this->loggedIn())
+		{
+		  $this->_twitter->statusUpdate($msg);
+  		$this->_requestsLeft = $this->_requestsLeft - 1;
+		}	
+		else
+		{
+		  throw new Zend_Exception("Unable to send message since login failed.");
+		}
 	}
 	
 	/**
@@ -177,6 +280,52 @@ class Semtech_Twitter
     }
 
     return $text;
+	}
+	
+	/**
+	 * Attempt to login in to Twitter with the currently set credentials.
+	 *
+	 * @return void
+	 * @author Marcus Ramsden
+	 */
+	private function _login()
+	{
+	  if (is_null($this->_twitter))
+	  {
+	    if (is_null($this->_username) || is_null($this->_password))
+  	  {
+  	    throw new Zend_Exception("Both the username and password need to be specified.");
+  	  }
+
+  	  $this->_twitter = new Zend_Service_Twitter($this->_username, $this->_password);
+
+  	  if ($this->_twitter->accountVerifyCredentials()->isSuccess())
+  		{
+  			$remaininghits = "remaining-hits";
+  			$this->_requestsLeft = $this->_twitter->accountRateLimitStatus()->$remaininghits();
+  			$this->_loggedIn = true;
+  		}
+  		else
+  		{
+  			throw new Zend_Exception("Twitter username and password incorrect.");
+  		}
+	  }
+	}
+	
+	/**
+	 * Logout of twitter and destroy any current session.
+	 *
+	 * @return void
+	 * @author Marcus Ramsden
+	 */
+	private function _logout()
+	{
+	  if (!is_null($this->_twitter))
+	  {
+	    $this->_twitter->accountEndSession();
+	  }
+	  
+	  $this->_twitter = null;
 	}
 }
 ?>

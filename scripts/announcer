@@ -41,7 +41,7 @@ while ($running)
   {
     $technologytable = new Semtech_Model_DbTable_Technologies();
     $technologies = $technologytable->fetchAll();
-    $twitter = new Semtech_Twitter();
+    $twitter = new Semtech_Twitter($application->getBootstrap()->getConfiguration()->service->twitter->username, $application->getBootstrap()->getConfiguration()->service->twitter->password);
     foreach ($technologes as $technology)
     {
       if (!$technology->isAnnounced())

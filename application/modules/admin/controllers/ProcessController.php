@@ -133,7 +133,7 @@ class Admin_ProcessController extends Semtech_Controller_Admin_Action
     }
     
     fclose($handle);
-    return array_reverse($text);
+    return $text;
   }
   
 }
