@@ -284,6 +284,10 @@ class Semtech_Model_Technology extends Zend_Db_Table_Row {
 				{
 				  $ret = "";
 				}
+				else
+				{
+				  $ret = date("d/m/Y", $ret);
+				}
 				break;
 			case "url":
 				if (!preg_match("/^.*:\/\/.*$/i", $ret))

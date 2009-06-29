@@ -11,7 +11,7 @@
         <table class="technologyinfo">
             <tbody>
                 <tr><th>Version</th><td><?= $this->technology->version != ""?$this->technology->version:"Not Specified"; ?></td></tr>
-                <tr><th>Release Date</th><td><?= $this->technology->release_date != ""?date("jS F Y", $this->technology->release_date):"Not Specified"; ?></td></tr>
+                <tr><th>Release Date</th><td><?= $this->technology->release_date != "" ? $this->technology->release_date :"Not Specified"; ?></td></tr>
                 <tr><th>Date Added</th><td><?= date("jS F Y", $this->technology->getOriginalRevision()->getCreatedOn()); ?></td></tr>
                 <tr><th>License</th><td><?= $this->technology->license; ?></td></tr>
             </tbody>

@@ -158,6 +158,7 @@ class Semtech_TechnologyController extends Semtech_Controller_Action
 			$form->setAction("/technology/edit");
 			$form->submit->setLabel("Update");
 			$form->populate($technology->toArray());
+			$form->release_date->setValue($technology->release_date);
 		}
 
 		$this->view->title = "Edit Technology Details";
