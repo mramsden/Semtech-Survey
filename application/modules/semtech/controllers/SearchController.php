@@ -42,7 +42,8 @@ class Semtech_SearchController extends Semtech_Controller_Action
 			$technologies = array();
 			foreach ($technologytags as $technologytag)
 			{
-				if (!Semtech_Model_Revision::getRevision($technologytag->revision)->isOriginal())
+			  $revision = Semtech_Model_Revision::getRevision($technologytag->revision);
+				if (!is_null($revision) && !$revision->isOriginal())
 				{
 					if (!isset($technologies[$technologytag->technology])) {
 						$technologies[$technologytag->technology]['technology'] = Semtech_Model_Technology::getTechnology($technologytag->technology); 
