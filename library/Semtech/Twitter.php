@@ -205,7 +205,7 @@ class Semtech_Twitter
     	    }
     	  }
     	  $cache->save($tweets, 'twitter_tweets');
-    	  $this->_requestsLeft = $this->_requestLeft - 1;
+    	  $this->_requestsLeft = $this->_requestsLeft - 1;
   	  }
   	  else
   	  {
