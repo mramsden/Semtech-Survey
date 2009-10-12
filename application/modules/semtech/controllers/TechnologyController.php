@@ -34,7 +34,7 @@ class Semtech_TechnologyController extends Semtech_Controller_Action
 		
 		if ($this->getRequest()->getParam('detail') != "")
 		{
-			$detailfield = $this->request->getParam("detail");
+			$detailfield = $this->getRequest()->getParam("detail");
 			$fields = $technology->toArray();
 			$this->view->title = "Detail View: $technology";
 			$this->view->data = $fields[$detailfield];

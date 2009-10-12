@@ -7,7 +7,7 @@
             <?php endif; ?>
             Technology Details</h2>
         <span style="font-weight: bold;">Description</span><br/>
-        <?= strlen($this->technology->description) > 50 ? substr($this->technology->description, 0, 50)." <a href=\"/technology/view/{$this->technology->id}/detail/description\" title=\"Read more about {$this->technology->name}\" onclick=\"javascript:window.open('/technology/view/{$this->technology->id}/detail/description'); return false;\">[...]</a>" : nl2br($this->technology->description); ?>
+        <?= strlen($this->technology->description) > 50 ? substr($this->technology->description, 0, 50)." <a href=\"/technology/view/{$this->technology->id}/description\" title=\"Read more about {$this->technology->name}\" onclick=\"javascript:window.open('/technology/view/{$this->technology->id}/description'); return false;\">[...]</a>" : nl2br($this->technology->description); ?>
         <table class="technologyinfo">
             <tbody>
                 <tr><th>Version</th><td><?= $this->technology->version != ""?$this->technology->version:"Not Specified"; ?></td></tr>
