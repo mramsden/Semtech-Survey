@@ -30,7 +30,7 @@ class Semtech_SearchController extends Semtech_Controller_Action
 
 	public function tagAction()
 	{
-	  $tag = $this->getRequest()->getParam("tagid");
+	  $tag = $this->getRequest()->getParam("tag");
 	  
 		if ($tag)
 		{
