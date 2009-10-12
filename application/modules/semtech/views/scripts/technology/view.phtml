@@ -7,7 +7,7 @@
             <?php endif; ?>
             Technology Details</h2>
         <span style="font-weight: bold;">Description</span><br/>
-        <?= strlen($this->technology->description) > 50 ? substr($this->technology->description, 0, 50)." <a href=\"/technology/view/{$this->technology->id}/description\" title=\"Read more about {$this->technology->name}\" onclick=\"javascript:window.open('/technology/view/{$this->technology->id}/description'); return false;\">[...]</a>" : nl2br($this->technology->description); ?>
+        <?= strlen($this->technology->description) > 50 ? substr($this->technology->description, 0, 50)." <a href=\"/technology/{$this->technology->id}/description\" title=\"Read more about {$this->technology->name}\" onclick=\"javascript:window.open('/technology/{$this->technology->id}/description'); return false;\">[...]</a>" : nl2br($this->technology->description); ?>
         <table class="technologyinfo">
             <tbody>
                 <tr><th>Version</th><td><?= $this->technology->version != ""?$this->technology->version:"Not Specified"; ?></td></tr>
@@ -17,7 +17,7 @@
             </tbody>
         </table>
         <span style="font-weight: bold;">Intellectual Property Rights</span><br/>
-        <?= $this->technology->iprights? (strlen($this->technology->iprights) > 50 ? substr($this->technology->iprights, 0, 50)." <a href=\"/technology/view/{$this->technology->id}/detail/iprights\" onclick=\"javascript:window.open('/technology/view/{$this->technology->id}/detail/iprights'); return false;\">[...]</a>" : nl2br($this->technology->iprights)) :"Not Specified"; ?><br/>
+        <?= $this->technology->iprights? (strlen($this->technology->iprights) > 50 ? substr($this->technology->iprights, 0, 50)." <a href=\"/technology/{$this->technology->id}/iprights\" onclick=\"javascript:window.open('/technology/{$this->technology->id}/iprights'); return false;\">[...]</a>" : nl2br($this->technology->iprights)) :"Not Specified"; ?><br/>
         <span style="font-weight: bold;">Added by</span>&nbsp;<?php echo is_numeric($this->technology->getOriginalRevision()->createdby) ? Semtech_Model_User::getUser($this->technology->getOriginalRevision()->createdby)->getName() : $this->technology->getOriginalRevision()->createdby;  ?>
     </div>
 </div>
