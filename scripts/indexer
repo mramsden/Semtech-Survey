@@ -21,15 +21,15 @@ $log->info("Semtech Survey Indexer started");
 
 $log->info("Attempting to load indexer.ini...");
 
-$settings = array();
+$settings = new Zend_Config(array('searchindex' => APPLICATION_PATH."/../var/search"));
+
 try
 {
-  $settings = new Zend_Config_Ini(APPLICATION_PATH."/config/indexer.ini");
+  $settings->merge(new Zend_Config_Ini(APPLICATION_PATH."/config/indexer.ini"));
 }
 catch (Zend_Config_Exception $e)
 {
   $log->info("Unable to find ".APPLICATION_PATH."/config/indexer.ini, assuming defaults.");
-  $settings->searchindex = APPLICATION_PATH."/../var/search";
 }
 
 try
