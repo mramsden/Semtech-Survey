@@ -34,18 +34,18 @@ catch (Zend_Config_Exception $e)
 
 try
 {
-  $searchindex = Zend_Search_Lucene::open($settings["searchindex"]);
+  $searchindex = Zend_Search_Lucene::open($settings->searchindex);
 }
 catch (Zend_Search_Lucene_Exception $e)
 {
   $log->info("Search index does not exist yet... creating a new one.");
   try
   {
-    $searchindex = Zend_Search_Lucene::create($settings["searchindex"]);
+    $searchindex = Zend_Search_Lucene::create($settings->searchindex);
   }
   catch (Zend_Search_Lucene_Exception $e)
   {
-    $log->err("Failed to load a search index in ".$settings["searchindex"]);
+    $log->err("Failed to load a search index in ".$settings->searchindex);
   }
 }
 
