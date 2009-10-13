@@ -17,8 +17,6 @@ $application->bootstrap();
 $log = Zend_Registry::get("log");
 $log->addWriter(new Zend_Log_Writer_Stream(APPLICATION_PATH.'/../var/logs/indexer.log'));
 
-touch(APPLICATION_PATH."/../var/processes/indexer");
-
 $log->info("Semtech Survey Indexer started");
 
 $log->info("Attempting to load indexer.ini...");
@@ -31,68 +29,50 @@ try
 catch (Zend_Config_Exception $e)
 {
   $log->info("Unable to find ".APPLICATION_PATH."/config/indexer.ini, assuming defaults.");
-  $settings["searchindex"] = APPLICATION_PATH."/../var/search";
-  $settings["interval"] = 3600;
+  $settings->searchindex = APPLICATION_PATH."/../var/search";
 }
 
-$running = true;
-
-while ($running)
+try
 {
-
-  if (!isset($nextsearch) || time() > $nextsearch)
-  {
-    try
-    {
-      $searchindex = Zend_Search_Lucene::open($settings["searchindex"]);
-    }
-    catch (Zend_Search_Lucene_Exception $e)
-    {
-      $log->info("Search index does not exist yet... creating a new one.");
-      try
-      {
-        $searchindex = Zend_Search_Lucene::create($settings["searchindex"]);
-      }
-      catch (Zend_Search_Lucene_Exception $e)
-      {
-        $log->err("Failed to load a search index in ".$settings["searchindex"]);
-      }
-    }
-
-    $technologiestable = new Semtech_Model_DbTable_Technologies();
-    foreach ($technologiestable->fetchAll() as $technology)
-    {
-      if (!technology_indexed($technology, $searchindex))
-      {
-        $doc = new Zend_Search_Lucene_Document();
-        $doc->addField(Zend_Search_Lucene_Field::Text('name', $technology->name));
-        $doc->addField(Zend_Search_Lucene_Field::UnStored('description', $technology->description));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('url', $technology->url));
-        $doc->addField(Zend_Search_Lucene_Field::Keyword('technologyid', $technology->id));
-
-        $searchindex->addDocument($doc);
-
-        $log->info("Added {$technology->name} to the search index.");
-      }
-    }
-
-    $log->info("Optimizing search index...");
-    $searchindex->optimize();
-    $log->info("Done.");
-
-    $searchindex->commit();
-    
-    $nextsearch = time() + $settings["interval"];
-    $log->info("The next index will happen at ".date("d/m/Y H:i:s", $nextsearch).".");
-  }
-  
-  if (!file_exists(APPLICATION_PATH."/../var/processes/indexer"))
-  {
-    $log->info("The process handle has been deleted shutting down indexer.");
-    $running = false;
-  }
-
+  $searchindex = Zend_Search_Lucene::open($settings["searchindex"]);
 }
+catch (Zend_Search_Lucene_Exception $e)
+{
+  $log->info("Search index does not exist yet... creating a new one.");
+  try
+  {
+    $searchindex = Zend_Search_Lucene::create($settings["searchindex"]);
+  }
+  catch (Zend_Search_Lucene_Exception $e)
+  {
+    $log->err("Failed to load a search index in ".$settings["searchindex"]);
+  }
+}
+
+$technologiestable = new Semtech_Model_DbTable_Technologies();
+foreach ($technologiestable->fetchAll() as $technology)
+{
+  if (!technology_indexed($technology, $searchindex))
+  {
+    $doc = new Zend_Search_Lucene_Document();
+    $doc->addField(Zend_Search_Lucene_Field::Text('name', $technology->name));
+    $doc->addField(Zend_Search_Lucene_Field::UnStored('description', $technology->description));
+    $doc->addField(Zend_Search_Lucene_Field::Keyword('url', $technology->url));
+    $doc->addField(Zend_Search_Lucene_Field::Keyword('technologyid', $technology->id));
+
+    $searchindex->addDocument($doc);
+
+    $log->info("Added {$technology->name} to the search index.");
+  }
+}
+
+$log->info("Optimizing search index...");
+$searchindex->optimize();
+$log->info("Done.");
+
+$searchindex->commit();
+
+$log->info("Indexing complete. Exiting...");
 
 exit(0);
 
