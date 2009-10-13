@@ -11,11 +11,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
 
 	/**
-	 * @var Zend_Log
-	 */
-	protected $_logger;
-
-	/**
 	 * @var Zend_Loader_Autoloader
 	 */
 	protected $_autoLoader;
@@ -34,26 +29,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	 * @var Zend_Controller_Front
 	 */
 	public $frontController;
-	
-	/**
-	 * Setup the logging.
-	 */
-	protected function _initLogging()
-	{
-		$logger = new Zend_Log();
-		
-		$writer = new Zend_Log_Writer_Stream(APPLICATION_PATH.'/../var/logs/cli.log');
-		//$writer = new Zend_Log_Writer_Stream('php://stdout');
-		$logger->addWriter($writer);
-		
-		if ('production' == $this->getEnvironment()) {
-			$filter = new Zend_Log_Filter_Priority(Zend_Log::INFO);
-			$logger->addFilter($filter);
-		}
-		
-		$this->_logger = $logger;
-		Zend_Registry::set('log', $logger);
-	}
 	
 	protected function _initConfig()
 	{
