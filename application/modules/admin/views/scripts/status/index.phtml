@@ -14,23 +14,32 @@
     <?php endif; ?>
   </table>
   <h2>Process Module</h2>
-  <p>
-    Indexer Status:&nbsp;
-  <?php if (file_exists(APPLICATION_PATH."/../var/processes/indexer")): ?>
-    <span style="color: green;">Running</span>&nbsp;<a href="/admin/process/stop/ps/indexer">Stop Indexer</a>
+  <?php if (sizeof($this->processes)): ?>
+    <table>
+      <tr><th>Process Name</th><th>Status</th><th></th></tr>
+      <?php foreach ($this->processes as $process): ?>
+      <tr>
+        <td><?php print $process->getName(); ?></td>
+        <td>
+        <?php if ($process->isRunning()): ?>
+          <span style="color: green;">Running</span>
+        <?php else: ?>
+          <span style="color: red;">Stopped</span>
+        <?php endif; ?>
+        </td>
+        <td>
+        <?php if ($process->isRunning()): ?>
+          <a href="/admin/process/stop/ps/<?php echo $process->getName(); ?>">Stop</a>
+        <?php else: ?>
+          <a href="/admin/process/start/ps/<?php echo $process->getName(); ?>">Start</a>
+        <?php endif; ?>
+        </td>
+      </tr>
+      <?php endforeach; ?>
+    </table>
   <?php else: ?>
-    <span style="color: red;">Stopped</span>&nbsp;<a href="/admin/process/start/ps/indexer">Start Indexer</a>
+    <p>There are currently not any processes installed.</p>
   <?php endif; ?>
-    &nbsp;<a href="/admin/process/log/ps/indexer">Read Log</a>
-  </p>
-  <p>
-    Announcer Status:&nbsp;
-  <?php if (file_exists(APPLICATION_PATH."/../var/processes/announcer")): ?>
-    <span style="color: green;">Running</span>&nbsp;<a href="/admin/process/stop/ps/announcer">Stop Announcer</a>
-  <?php else: ?>
-    <span style="color: red;">Stopped</span>&nbsp;<a href="/admin/process/start/ps/announcer">Start Announcer</a>
-  <?php endif; ?>
-    &nbsp;<a href="/admin/process/log/ps/announcer">Read Log</a>  
   </p>
   <h2>Twitter Module</h2>
   <table>
