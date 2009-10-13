@@ -58,6 +58,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		$this->_autoloader->pushAutoloader($semtechmoduleloader);
 	}
 	
+	protected function _initLog()
+	{
+		$log = new Zend_Log();
+		Zend_Registry::getInstance()->log = $log;
+	}
+	
 	protected function _initSearchEngine()
 	{
 		Zend_Registry::getInstance()->searchindex = APPLICATION_PATH.'/../var/search';
