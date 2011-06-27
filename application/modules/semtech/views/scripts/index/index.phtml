@@ -20,26 +20,33 @@ ul.tagcloud .count {
 	color: #888;
 }"); ?>
 <?= $this->headScript()->appendFile("/js/lib/jquery.cycle.all.min.js"); ?>
-<?= $this->headScript()->appendScript("
-  $(function() {
-    $(\"div#twitter_feed\").cycle('scrollUp');
-  })
-"); ?>
+<?php $this->headScript()->appendFile("http://platform.twitter.com/anywhere.js?id=bPoHnkgmdRA5o7fD6p2cg"); ?>
+<?php $this->headScript()->captureStart(); ?>
+twttr.anywhere(function(T) {
+	T('#follow-semtech-twitter').followButton('semtech');
+});
+
+$(function() {
+	$.getJSON("http://twitter.com/status/user_timeline/semtech.json?count=10&callback=?", function(data) {
+		$.each(data, function(key, val) {
+			console.log(val);
+			$("#twitter-stream").append("<div>"+val.text+"</div>");
+		});
+		$(".twitterbox #twitter-stream").cycle('scrollUp');
+	});
+});
+<?php $this->headScript()->captureEnd(); ?>
 <h1>Welcome to the SemTech Survey</h1>
-<div style="float: right; width: 400px; border: 1px solid #F6F6F6; text-align: right; padding: 5px;">
-  <?php if (isset($this->tweets) && sizeof($this->tweets)): ?>
-	<h2>SemTech Twitter Feed <img src="/images/twitter_boxed_48.png" align="middle" border="0"/><br/><a href="http://twitter.com/semtech" title="Click here to follow us!"><span style="font-size: small;">Follow Us</span></a></h2>
-	<div id="twitter_feed">
-	<?php foreach ($this->tweets as $tweet): ?>
-	  <div class="frontpage_tweet">
-	    <span style="font-weight: bold;"><?php echo $tweet['user']; ?> said:</span><br/>
-	    <?php echo $tweet['message']; ?>
-	  </div>
-	<?php endforeach; ?>
+
+<div style="float: right; width: 400px;">
+	<div class="twitterbox">
+		<span id="follow-semtech-twitter"></span>
+		<div id="twitter-stream"></div>
 	</div>
-	<?php endif; ?>
-	<h2>Common Tags</h2>
-	<span style="font-size: 10px;"><?= $this->tagcloud; ?></span>
+	<div style="border: 1px solid #F6F6F6; text-align: right; padding: 5px;">
+		<h2>Common Tags</h2>
+		<span style="font-size: 10px;"><?= $this->tagcloud; ?></span>
+	</div>
 </div>
 <div style="float:left; width: 350px">
 	<p>Welcome to the SemTech Survey! This application is a product of the <a href="http://semtech.ecs.soton.ac.uk">Semtech</a> project carried out by the Learning Societies Laboratory at the University of Southampton.</p>

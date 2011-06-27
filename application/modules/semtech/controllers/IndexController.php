@@ -27,7 +27,6 @@ class Semtech_IndexController extends Semtech_Controller_Action
 			$tagcloud->addElement(new Semtech_Tagcloud_Element($tag['name'], $tag['weight'], "/search/tag/$tagid"));
 		}
 		
-		$this->view->tweets = Zend_Registry::get("twitter")->getStatusMessages();
 		$this->view->tagcloud = $tagcloud;
 	}
 	
